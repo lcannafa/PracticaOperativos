@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <cerrno>
 #include <cstring>
+#include <unistd.h>
 #include "elementos.h"
 
 using namespace std;
@@ -40,17 +41,19 @@ main(void) {
   int item = 0;
 
   for(;;) {
+    item++;
 
-    sem_wait(llenos);
+    sem_wait(vacios);
     sem_wait(mutex);
 
-    item = pBuffer->buffer[pBuffer->sale].elemento;
-    pBuffer->sale = (pBuffer->sale + 1) % pBuffer->tamano;
-    pBuffer->cantidad--;
+    pBuffer->buffer[pBuffer->entra].elemento = item;
+    pBuffer->entra = (pBuffer->entra + 1) % pBuffer->tamano;
+    pBuffer->cantidad++;
 
     sem_post(mutex);
-    sem_post(vacios);
-    cout << item << endl;
+    sem_post(llenos);
+    cout << "Item producido y ubicado" << endl;
+    sleep(2);
   }
 
   return EXIT_SUCCESS;
