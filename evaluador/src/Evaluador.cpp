@@ -15,7 +15,7 @@ using namespace std;
 int
 main(void) {
 
-    const char* n = "evaluator2";
+    const char* n = "evaluator";
     // crea el espacio de memoria compartida, lanza error si ya existe
     int fd = shm_open(n, O_RDWR | O_CREAT | O_EXCL, 0660);
 
