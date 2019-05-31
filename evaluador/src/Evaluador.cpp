@@ -12,23 +12,30 @@
 
 using namespace std;
 
+
+
 int
 main(void) {
 
+    // variables a modificar en la ejecución
     const char* n = "evaluator";
-    // crea el espacio de memoria compartida, lanza error si ya existe
+    int i = 5;
+    int ie = 6;
+
+
+    // crea el espacio de memoria compartida, lanza error si ya existe el mode_t define derechos 0660 el usuario puede leer y escribir
     int fd = shm_open(n, O_RDWR | O_CREAT | O_EXCL, 0660);
 
     if (fd < 0) {
     cerr << "Error creando la memoria compartida: 1 "
-	 << errno << strerror(errno) << endl;
+	  << errno << strerror(errno) << endl;
     exit(1);
   }
 
-
-  if (ftruncate(fd, sizeof(struct BufferI)) != 0) {
+    // para evitar error truncamos para el tamaño requerido
+    if (ftruncate(fd, sizeof(struct elemento) * i * ie  ) != 0) {
     cerr << "Error creando la memoria compartida: 2 "
-	 << errno << strerror(errno) << endl;
+	  << errno << strerror(errno) << endl;
     exit(1);
   }
 
@@ -37,15 +44,9 @@ main(void) {
   if ((dir = mmap(NULL, sizeof(struct elemento)*i*ie, PROT_READ | PROT_WRITE, MAP_SHARED,
 		  fd, 0)) == MAP_FAILED) {
     cerr << "Error mapeando la memoria compartida: 3 "
-	 << errno << strerror(errno) << endl;
+	  << errno << strerror(errno) << endl;
     exit(1);
   }
-
-  
-  struct BufferIE test;
-
-  struct BufferI *pBufferI = (struct BufferI *) dir;
-  pBufferI->bufferI[0] = test;
 
   close(fd);
 }
