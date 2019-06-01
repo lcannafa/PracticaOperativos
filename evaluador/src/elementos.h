@@ -1,6 +1,12 @@
 #pragma once
 
-
-struct elemento {
-  int registro[2];
+struct registroentrada {
+  int bandeja;
+  int id;
+  char tipo;
+  int cantidad;
 };
+
+// externo -> nombrado
+// interno -> anonimo
+struct registrosalida{};

@@ -39,14 +39,18 @@ main(void) {
     exit(1);
   }
 
-  void *dir;
+  void *dir[i];
+
+  //for(){}
+
+  /*void *dir;
   // mapea el espacio de memoria reservado y guarda la dirreción en el apuntador dir
   if ((dir = mmap(NULL, sizeof(struct elemento)*i*ie, PROT_READ | PROT_WRITE, MAP_SHARED,
 		  fd, 0)) == MAP_FAILED) {
     cerr << "Error mapeando la memoria compartida: 3 "
 	  << errno << strerror(errno) << endl;
     exit(1);
-  }
+  }*/
 
   close(fd);
 }
