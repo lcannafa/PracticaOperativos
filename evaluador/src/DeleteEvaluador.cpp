@@ -11,11 +11,10 @@ using namespace std;
 int
 main(void) {
 
-  //sem_unlink("vacios");
-  //sem_unlink("llenos");
-  //sem_unlink("mutex");
+  sem_unlink("vacios");
+  sem_unlink("llenos");
+  sem_unlink("mutex");
   shm_unlink("/buffer");
-  //shm_unlink("/evaluator2");
 
   return EXIT_SUCCESS;
 }
