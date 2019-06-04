@@ -14,7 +14,7 @@ main(void) {
   //sem_unlink("vacios");
   //sem_unlink("llenos");
   //sem_unlink("mutex");
-  shm_unlink("/evaluator");
+  shm_unlink("/buffer");
   //shm_unlink("/evaluator2");
 
   return EXIT_SUCCESS;

@@ -16,34 +16,32 @@ int
 crearEspacio(int i, int ie, int oe) {
 
 
-  //int i = 5;
-  //int ie = 6;
-  //int oe = 10;
+  size_t memorysize = (sizeof(struct registroentrada)* i * ie) + (sizeof(struct registrosalida) * oe);
   // instanciar los semaforos, el valor define cuanto empieza
   sem_t *vacios = sem_open("vacios", O_CREAT | O_EXCL, 0660, i*ie);
   sem_t *llenos = sem_open("llenos", O_CREAT | O_EXCL, 0660, 0);
-  //sem_t *mutex  = sem_open("mutex", O_CREAT | O_EXCL, 0660, 1);
+  sem_t *mutex  = sem_open("mutex", O_CREAT | O_EXCL, 0660, 1);
 
   // Abrir espacio de memoria para usar
   int fd = shm_open("buffer", O_RDWR | O_CREAT | O_EXCL, 0660);
 
   if (fd < 0) {
-    cerr << "Error creando la memoria compartida: "
+    cerr << "Error creando la memoria compartida: 1"
 	 << errno << strerror(errno) << endl;
     exit(1);
   }
 
-  if (ftruncate(fd, (sizeof(struct registroentrada)* i * ie) + (sizeof(struct registrosalida) * oe) ) != 0) {
-    cerr << "Error creando la memoria compartida: "
+  if (ftruncate(fd, memorysize != 0) ) {
+    cerr << "Error creando la memoria compartida: 2"
 	 << errno << strerror(errno) << endl;
     exit(1);
   }
 
   void *dir;
 
-  if ((dir = mmap(NULL, (sizeof(struct registroentrada)* i * ie) + (sizeof(struct registrosalida) * oe) , PROT_READ | PROT_WRITE, MAP_SHARED,
+  if ((dir = mmap(NULL, memorysize , PROT_READ | PROT_WRITE, MAP_SHARED,
 		  fd, 0)) == MAP_FAILED) {
-    cerr << "Error mapeando la memoria compartida: "
+    cerr << "Error mapeando la memoria compartida: 3"
 	 << errno << strerror(errno) << endl;
     exit(1);
   }
