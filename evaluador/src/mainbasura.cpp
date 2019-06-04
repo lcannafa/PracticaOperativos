@@ -1,7 +1,7 @@
 #include "IniciadorMemoria.cpp"
 #include "ingresoelemento.cpp"
 int main (){
-    crearEspacio(3, 5, 10);
+    crearEspacio("buffer",3, 5, 10);
     struct registroentrada test;
     test.bandeja = 1;
     test.cantidad = 3;

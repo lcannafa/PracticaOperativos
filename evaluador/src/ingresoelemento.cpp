@@ -88,17 +88,20 @@ ingresarRegistro(struct registroentrada registro, int i, int ie, int oe) {
     return EXIT_SUCCESS;
 }
 
+// Método que imprime el contenido de las bandejas de entrada
 int recorrer(int i, int ie ,int oe){
   int temp1 = 0;
   int temp2 = 0;
 
 
+  // Sube los semaforos
   //sem_t *vacios, *llenos;
   sem_t *mutex;
   //vacios = sem_open("vacios", 0);
   //llenos = sem_open("llenos", 0);
   mutex  = sem_open("mutex", 0);
-
+ 
+  // open del espacio compartida
   int fd = shm_open("/buffer", O_RDWR, 0660);
 
   if (fd < 0) {

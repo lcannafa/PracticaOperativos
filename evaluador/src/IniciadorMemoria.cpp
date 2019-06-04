@@ -13,7 +13,7 @@
 using namespace std;
 
 int
-crearEspacio(int i, int ie, int oe) {
+crearEspacio(string n ,int i, int ie, int oe) {
 
 
   size_t memorysize = (sizeof(struct registroentrada)* i * ie) + (sizeof(struct registrosalida) * oe);
@@ -22,8 +22,9 @@ crearEspacio(int i, int ie, int oe) {
   sem_t *llenos = sem_open("llenos", O_CREAT | O_EXCL, 0660, 0);
   sem_t *mutex  = sem_open("mutex", O_CREAT | O_EXCL, 0660, 1);
 
-  // Abrir espacio de memoria para usar
-  int fd = shm_open("buffer", O_RDWR | O_CREAT | O_EXCL, 0660);
+
+  // Abrir espacio de memoria para usar, usando el nombre n
+  int fd = shm_open( n.c_str(), O_RDWR | O_CREAT | O_EXCL, 0660);
 
   if (fd < 0) {
     cerr << "Error creando la memoria compartida: 1"
