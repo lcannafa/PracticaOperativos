@@ -12,7 +12,7 @@
 using namespace std;
 
 int
-ingresarRegistro(struct registroentrada registro, int ie, int oe, int i) {
+ingresarRegistro(struct registroentrada registro, int i, int ie, int oe) {
   
 
   //sem_t *vacios, *llenos;
@@ -60,13 +60,14 @@ ingresarRegistro(struct registroentrada registro, int ie, int oe, int i) {
        struct registroentrada *pRegistro = (struct registroentrada *) posn;
 
         //si logra insertar se sale
-        if(pRegistro->cantidad <= 0 ){
+        if(pRegistro->cantidad <= 0  && !insertado){
          pRegistro->bandeja = registro.bandeja;
          pRegistro->id = registro.id;
          pRegistro->tipo = registro.tipo;
          pRegistro->cantidad = registro.cantidad;
          insertado = true;
-         break;
+         sem_post(mutex);
+         return 0;
         }
        // sino sigue avanzando
        else{n++;}
@@ -80,10 +81,54 @@ ingresarRegistro(struct registroentrada registro, int ie, int oe, int i) {
       }
       if(insertado){
       sem_post(mutex);
+      return 0;
       }
     }
-    break;
+  }
+    return EXIT_SUCCESS;
+}
+
+int recorrer(int i, int ie ,int oe){
+  int temp1 = 0;
+  int temp2 = 0;
+
+
+  //sem_t *vacios, *llenos;
+  sem_t *mutex;
+  //vacios = sem_open("vacios", 0);
+  //llenos = sem_open("llenos", 0);
+  mutex  = sem_open("mutex", 0);
+
+  int fd = shm_open("/buffer", O_RDWR, 0660);
+
+  if (fd < 0) {
+    cerr << "Error abriendo la memoria compartida: 4"
+	 << errno << strerror(errno) << endl;
+    exit(1);
+  }
+  // posición inicial
+  int *dir;
+  bool insertado = false;
+
+  // saca en dir la posicion inicial del espacio de memoria
+  if ((dir = (int *)(mmap(NULL, (sizeof(struct registroentrada)* i * ie ) + (sizeof(struct registrosalida) * oe) /* + (sizeof(struct variablesExtra))**/, PROT_READ | PROT_WRITE, MAP_SHARED,
+		  fd, 0))) == MAP_FAILED) {
+      cerr << "Error mapeando la memoria compartida: 5"
+	         << errno << strerror(errno) << endl;
+           exit(1);
   }
 
-  return EXIT_SUCCESS;
+
+  while (temp1 < i){
+    int *pos = (temp1 * ie * sizeof(registroentrada)) + dir;
+    while(temp2 < ie){
+    int *posn = (pos + (temp2 *sizeof(registroentrada)));
+    struct registroentrada *pRegistro = (struct registroentrada *) posn;
+    cout << pRegistro->id << pRegistro->tipo << pRegistro->cantidad << endl;
+    temp2++;
+    }
+    temp1++;
+    temp2 = 0;
+  }
+  return 0;
 }
