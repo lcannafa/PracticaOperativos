@@ -13,20 +13,14 @@
 using namespace std;
 
 int
-main() {
+ingresarRegistro(struct registroentrada registro, int ie, int oe, int i) {
   
-  struct registroentrada registro;
-  int ie = 3;
-  int oe = 3;
-  //sem_t *vacios, *llenos, *mutex;
-  int i = 3;
-  int n = 0;
-  int m = 0;
+
+  //sem_t *vacios, *llenos;
+  sem_t *mutex;
   //vacios = sem_open("vacios", 0);
   //llenos = sem_open("llenos", 0);
-  //mutex  = sem_open("mutex", 0);
-
-  crearEspacio(i,ie,oe);
+  mutex  = sem_open("mutex", 0);
 
   int fd = shm_open("/buffer", O_RDWR, 0660);
 
@@ -35,42 +29,61 @@ main() {
 	 << errno << strerror(errno) << endl;
     exit(1);
   }
-
+  // posición inicial
   int *dir;
+  bool insertado = false;
 
-  if ((dir = (int *)(mmap(NULL, (sizeof(struct registroentrada)* i * ie ) + (sizeof(struct registrosalida) * oe) , PROT_READ | PROT_WRITE, MAP_SHARED,
+  // saca en dir la posicion inicial del espacio de memoria
+  if ((dir = (int *)(mmap(NULL, (sizeof(struct registroentrada)* i * ie ) + (sizeof(struct registrosalida) * oe) /* + (sizeof(struct variablesExtra))**/, PROT_READ | PROT_WRITE, MAP_SHARED,
 		  fd, 0))) == MAP_FAILED) {
-    cerr << "Error mapeando la memoria compartida: 5"
-	 << errno << strerror(errno) << endl;
-    exit(1);
+      cerr << "Error mapeando la memoria compartida: 5"
+	         << errno << strerror(errno) << endl;
+           exit(1);
   }
+  // variable para recorrer la bandeja
+  int n = 0;
+  // posición inicial de la bandeja i
+  int *pos = (registro.bandeja * ie * sizeof(registroentrada)) + dir;
 
-  int *inicio = dir;
-  struct registroentrada *pRegistro = (struct registroentrada *) dir;
-  
+    
+
   for(;;) {
-    //sem_wait(vacios);
-    //sem_wait(mutex);
-    while( n < i){
-    dir = ( inicio + (sizeof(struct registroentrada) * (i * ie))  +  (n * sizeof(struct registroentrada))   );
-    struct registroentrada *pRegistro = (struct registroentrada *) dir;
-    pRegistro->id = n;
-    cout << "Estamos en bello"<< endl;
-    //cout << n                 << endl;
-    while( m < ie){
-      cout << pRegistro->id     << endl;
-      m++;
+
+    //hasta que no logre insertar intentar
+    while(!insertado){
+    // Espera la semaforo para insertar
+      sem_wait(mutex);
+      // ciclo que avanza dentro de una bandeja usando n, recorre bandeja
+      while(n < ie){
+
+       //posición en la bandeja
+       int *posn = (pos + (n*sizeof(registroentrada)));
+       struct registroentrada *pRegistro = (struct registroentrada *) posn;
+
+        //si logra insertar se sale
+        if(pRegistro->cantidad <= 0 ){
+         pRegistro->bandeja = registro.bandeja;
+         pRegistro->id = registro.id;
+         pRegistro->tipo = registro.tipo;
+         pRegistro->cantidad = registro.cantidad;
+         insertado = true;
+         break;
+        }
+       // sino sigue avanzando
+       else{n++;}
+      }
+       // si no logro insertar pero recorri la bandeja notifico y espero
+      if(n >= ie && !insertado){
+      cout << "registro full" << endl;
+      sem_post(mutex);
+      sleep(5);
+      n = 0;
+      }
+      if(insertado){
+      sem_post(mutex);
+      }
     }
-    
-    n++;
-    m=0;
-    }
-    
-    
-    
-    //sem_post(mutex);
-    //sem_post(llenos);
-    sleep(2);
+    break;
   }
 
   return EXIT_SUCCESS;
