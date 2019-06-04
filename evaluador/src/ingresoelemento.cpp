@@ -8,7 +8,6 @@
 #include <cstring>
 #include <unistd.h>
 #include "elementos.h"
-#include "IniciadorMemoria.cpp"
 
 using namespace std;
 
