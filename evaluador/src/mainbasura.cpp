@@ -13,8 +13,8 @@ int main (){
     test2.cantidad = 3;
     test2.id = 5;
     test2.tipo = 'D';
-    ingresarRegistro(test,3,5,10);
-    ingresarRegistro(test2,3,5,10);
-    recorrer(3,5,10);
+    ingresarRegistro(test,"buffer",3,5,10);
+    ingresarRegistro(test2,"buffer",3,5,10);
+    recorrer("buffer",3,5,10);
     return 0;
     }

@@ -12,7 +12,7 @@
 using namespace std;
 
 int
-ingresarRegistro(struct registroentrada registro, int i, int ie, int oe) {
+ingresarRegistro(struct registroentrada registro, string nombre, int i, int ie, int oe) {
   
 
   //sem_t *vacios, *llenos;
@@ -21,7 +21,9 @@ ingresarRegistro(struct registroentrada registro, int i, int ie, int oe) {
   //llenos = sem_open("llenos", 0);
   mutex  = sem_open("mutex", 0);
 
-  int fd = shm_open("/buffer", O_RDWR, 0660);
+  nombre = "/" + nombre;
+  //accede a la memoria compartida
+  int fd = shm_open(nombre.c_str(), O_RDWR, 0660);
 
   if (fd < 0) {
     cerr << "Error abriendo la memoria compartida: 4"
@@ -89,7 +91,7 @@ ingresarRegistro(struct registroentrada registro, int i, int ie, int oe) {
 }
 
 // Método que imprime el contenido de las bandejas de entrada
-int recorrer(int i, int ie ,int oe){
+int recorrer(string nombre, int i, int ie ,int oe){
   int temp1 = 0;
   int temp2 = 0;
 
@@ -102,7 +104,8 @@ int recorrer(int i, int ie ,int oe){
   mutex  = sem_open("mutex", 0);
  
   // open del espacio compartida
-  int fd = shm_open("/buffer", O_RDWR, 0660);
+  nombre = "/" + nombre;
+  int fd = shm_open(nombre.c_str(), O_RDWR, 0660);
 
   if (fd < 0) {
     cerr << "Error abriendo la memoria compartida: 4"
