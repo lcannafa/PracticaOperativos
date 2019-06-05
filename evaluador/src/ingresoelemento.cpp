@@ -14,37 +14,22 @@
 using namespace std;
 // función que le entregan un registro a guardar en la memoria compartida de nombre, pero para facil manipulación requiere i ie y oe de dicha memoria
 int
-ingresarRegistro(struct registroentrada registro, string nombre, int i, int ie, int oe) {
+ingresarRegistro(struct registroentrada registro, string nombre) {
   
 
-  //sem_t *vacios, *llenos;
   sem_t *mutex;
-  //vacios = sem_open("vacios", 0);
-  //llenos = sem_open("llenos", 0);
   mutex  = sem_open("mutex", 0);
 
-  nombre = "/" + nombre;
   //accede a la memoria compartida
-  //int fd = shm_open(nombre.c_str(), O_RDWR, 0660);
-
-  /*if (fd < 0) {
-    cerr << "Error abriendo la memoria compartida: 4"
-	 << errno << strerror(errno) << endl;
-    exit(1);
-  }*/
   // posición inicial
   char *dir = abrirMemoria(nombre);
   bool insertado = false;
 
-  // saca en dir la posicion inicial del espacio de memoria
-  /*if ((dir = (int *)(mmap(NULL, (sizeof(struct registroentrada)* i * ie) + (sizeof(struct registrosalida) * oe), PROT_READ | PROT_WRITE, MAP_SHARED,
-		  fd, 0))) == MAP_FAILED) {
-      cerr << "Error mapeando la memoria compartida: 5"
-	         << errno << strerror(errno) << endl;
-           exit(1);
-  }*/
-
-
+  struct header *pHeader = (struct header *) dir;
+  
+    int i  = pHeader->i;
+    int ie = pHeader->ie;
+    int oe = pHeader->oe;
 
   // variable para recorrer la bandeja
   int n = 0;
@@ -55,9 +40,9 @@ ingresarRegistro(struct registroentrada registro, string nombre, int i, int ie, 
 
   for(;;) {
 
-    //hasta que no logre insertar intentar
-    while(!insertado){
-    // Espera la semaforo para insertar
+      //hasta que no logre insertar intentar
+      while(!insertado){
+      // Espera la semaforo para insertar
       sem_wait(mutex);
       // ciclo que avanza dentro de una bandeja usando n, recorre bandeja
       while(n < ie){
@@ -96,29 +81,23 @@ ingresarRegistro(struct registroentrada registro, string nombre, int i, int ie, 
 }
 
 // Método que imprime el contenido de las bandejas de entrada
-int recorrer(string nombre, int i, int ie ,int oe){
+int recorrer(string nombre){
   int temp1 = 0;
   int temp2 = 0;
 
 
   // Sube los semaforos
-  //sem_t *vacios, *llenos;
   sem_t *mutex;
-  //vacios = sem_open("vacios", 0);
-  //llenos = sem_open("llenos", 0);
   mutex  = sem_open("mutex", 0);
  
   // posición inicial
   char *dir = abrirMemoria(nombre);
   bool insertado = false;
-
-  // saca en dir la posicion inicial del espacio de memoria
- /* if ((dir = (int *)(mmap(NULL, (sizeof(struct registroentrada)* i * ie) + (sizeof(struct registrosalida) * oe), PROT_READ | PROT_WRITE, MAP_SHARED,
-		  fd, 0))) == MAP_FAILED) {
-      cerr << "Error mapeando la memoria compartida: 5"
-	         << errno << strerror(errno) << endl;
-           exit(1);
-  }*/
+  struct header *pHeader = (struct header *) dir;
+  
+    int i  = pHeader->i;
+    int ie = pHeader->ie;
+    int oe = pHeader->oe;
 
 
   while (temp1 < i){

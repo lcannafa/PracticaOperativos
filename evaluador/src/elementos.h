@@ -12,6 +12,8 @@ struct header{
   int s;
   char n[30];
 };
+
+
 struct registroentrada {
   int bandeja;
   int id;

@@ -22,8 +22,8 @@ int main (){
     test2.cantidad = 3;
     test2.id = 5;
     test2.tipo = 'D';
-    ingresarRegistro(test,"buffer",3,5,10);
-    ingresarRegistro(test2,"buffer",3,5,10);
-    recorrer("buffer",3,5,10);
+    ingresarRegistro(test,"buffer");
+    ingresarRegistro(test2,"buffer");
+    recorrer("buffer");
     return 0;
     }
