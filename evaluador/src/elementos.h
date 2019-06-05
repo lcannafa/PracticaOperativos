@@ -15,7 +15,3 @@ struct registrosalida{
   char tipo;
   int cantidad;
 };
-
-struct semaforos{
- sem_t sem;
-};

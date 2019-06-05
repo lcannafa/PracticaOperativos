@@ -1,3 +1,4 @@
+#pragma once
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
@@ -10,7 +11,7 @@
 #include "elementos.h"
 
 using namespace std;
-
+// función que le entregan un registro a guardar en la memoria compartida de nombre, pero para facil manipulación requiere i ie y oe de dicha memoria
 int
 ingresarRegistro(struct registroentrada registro, string nombre, int i, int ie, int oe) {
   
@@ -35,12 +36,15 @@ ingresarRegistro(struct registroentrada registro, string nombre, int i, int ie, 
   bool insertado = false;
 
   // saca en dir la posicion inicial del espacio de memoria
-  if ((dir = (int *)(mmap(NULL, (sizeof(struct registroentrada)* i * ie ) + (sizeof(struct registrosalida) * oe) /* + (sizeof(struct variablesExtra))**/, PROT_READ | PROT_WRITE, MAP_SHARED,
+  if ((dir = (int *)(mmap(NULL, (sizeof(struct registroentrada)* i * ie) + (sizeof(struct registrosalida) * oe), PROT_READ | PROT_WRITE, MAP_SHARED,
 		  fd, 0))) == MAP_FAILED) {
       cerr << "Error mapeando la memoria compartida: 5"
 	         << errno << strerror(errno) << endl;
            exit(1);
   }
+
+
+
   // variable para recorrer la bandeja
   int n = 0;
   // posición inicial de la bandeja i
@@ -117,7 +121,7 @@ int recorrer(string nombre, int i, int ie ,int oe){
   bool insertado = false;
 
   // saca en dir la posicion inicial del espacio de memoria
-  if ((dir = (int *)(mmap(NULL, (sizeof(struct registroentrada)* i * ie ) + (sizeof(struct registrosalida) * oe) /* + (sizeof(struct variablesExtra))**/, PROT_READ | PROT_WRITE, MAP_SHARED,
+  if ((dir = (int *)(mmap(NULL, (sizeof(struct registroentrada)* i * ie) + (sizeof(struct registrosalida) * oe), PROT_READ | PROT_WRITE, MAP_SHARED,
 		  fd, 0))) == MAP_FAILED) {
       cerr << "Error mapeando la memoria compartida: 5"
 	         << errno << strerror(errno) << endl;
