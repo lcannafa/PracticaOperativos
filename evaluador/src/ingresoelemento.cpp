@@ -9,6 +9,7 @@
 #include <cstring>
 #include <unistd.h>
 #include "elementos.h"
+#include "AbrirMemoria.cpp"
 
 using namespace std;
 // función que le entregan un registro a guardar en la memoria compartida de nombre, pero para facil manipulación requiere i ie y oe de dicha memoria
@@ -24,24 +25,24 @@ ingresarRegistro(struct registroentrada registro, string nombre, int i, int ie, 
 
   nombre = "/" + nombre;
   //accede a la memoria compartida
-  int fd = shm_open(nombre.c_str(), O_RDWR, 0660);
+  //int fd = shm_open(nombre.c_str(), O_RDWR, 0660);
 
-  if (fd < 0) {
+  /*if (fd < 0) {
     cerr << "Error abriendo la memoria compartida: 4"
 	 << errno << strerror(errno) << endl;
     exit(1);
-  }
+  }*/
   // posición inicial
-  int *dir;
+  int *dir = abrirMemoria(nombre, i, ie, oe);
   bool insertado = false;
 
   // saca en dir la posicion inicial del espacio de memoria
-  if ((dir = (int *)(mmap(NULL, (sizeof(struct registroentrada)* i * ie) + (sizeof(struct registrosalida) * oe), PROT_READ | PROT_WRITE, MAP_SHARED,
+  /*if ((dir = (int *)(mmap(NULL, (sizeof(struct registroentrada)* i * ie) + (sizeof(struct registrosalida) * oe), PROT_READ | PROT_WRITE, MAP_SHARED,
 		  fd, 0))) == MAP_FAILED) {
       cerr << "Error mapeando la memoria compartida: 5"
 	         << errno << strerror(errno) << endl;
            exit(1);
-  }
+  }*/
 
 
 
@@ -109,24 +110,24 @@ int recorrer(string nombre, int i, int ie ,int oe){
  
   // open del espacio compartida
   nombre = "/" + nombre;
-  int fd = shm_open(nombre.c_str(), O_RDWR, 0660);
+  //int fd = shm_open(nombre.c_str(), O_RDWR, 0660);
 
-  if (fd < 0) {
+  /*if (fd < 0) {
     cerr << "Error abriendo la memoria compartida: 4"
 	 << errno << strerror(errno) << endl;
     exit(1);
-  }
+  }*/
   // posición inicial
-  int *dir;
+  int *dir = abrirMemoria(nombre, i, ie, oe);
   bool insertado = false;
 
   // saca en dir la posicion inicial del espacio de memoria
-  if ((dir = (int *)(mmap(NULL, (sizeof(struct registroentrada)* i * ie) + (sizeof(struct registrosalida) * oe), PROT_READ | PROT_WRITE, MAP_SHARED,
+ /* if ((dir = (int *)(mmap(NULL, (sizeof(struct registroentrada)* i * ie) + (sizeof(struct registrosalida) * oe), PROT_READ | PROT_WRITE, MAP_SHARED,
 		  fd, 0))) == MAP_FAILED) {
       cerr << "Error mapeando la memoria compartida: 5"
 	         << errno << strerror(errno) << endl;
            exit(1);
-  }
+  }*/
 
 
   while (temp1 < i){
