@@ -1,7 +1,16 @@
 #include "IniciadorMemoria.cpp"
 #include "ingresoelemento.cpp"
 int main (){
-    crearEspacio("buffer",3, 5, 10);
+    string nombre = "buffer";
+    int i= 3;
+    int ie = 5;
+    int oe = 10;
+    int q = 5;
+    int b = 5;
+    int d = 5;
+    int s = 5;
+    
+    crearEspacio(nombre,i,ie,oe,q,b,d,s);
     struct registroentrada test;
     test.bandeja = 0;
     test.cantidad = 3;

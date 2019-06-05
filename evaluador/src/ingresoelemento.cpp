@@ -33,7 +33,7 @@ ingresarRegistro(struct registroentrada registro, string nombre, int i, int ie, 
     exit(1);
   }*/
   // posición inicial
-  int *dir = abrirMemoria(nombre, i, ie, oe);
+  char *dir = abrirMemoria(nombre);
   bool insertado = false;
 
   // saca en dir la posicion inicial del espacio de memoria
@@ -49,7 +49,7 @@ ingresarRegistro(struct registroentrada registro, string nombre, int i, int ie, 
   // variable para recorrer la bandeja
   int n = 0;
   // posición inicial de la bandeja i
-  int *pos = (registro.bandeja * ie * sizeof(registroentrada)) + dir;
+  char *pos = (registro.bandeja * ie * sizeof(registroentrada)) + dir + sizeof(struct header);
 
     
 
@@ -63,7 +63,7 @@ ingresarRegistro(struct registroentrada registro, string nombre, int i, int ie, 
       while(n < ie){
 
        //posición en la bandeja
-       int *posn = (pos + (n*sizeof(registroentrada)));
+       char *posn = (pos + (n*sizeof(registroentrada)));
        struct registroentrada *pRegistro = (struct registroentrada *) posn;
 
         //si logra insertar se sale
@@ -108,17 +108,8 @@ int recorrer(string nombre, int i, int ie ,int oe){
   //llenos = sem_open("llenos", 0);
   mutex  = sem_open("mutex", 0);
  
-  // open del espacio compartida
-  nombre = "/" + nombre;
-  //int fd = shm_open(nombre.c_str(), O_RDWR, 0660);
-
-  /*if (fd < 0) {
-    cerr << "Error abriendo la memoria compartida: 4"
-	 << errno << strerror(errno) << endl;
-    exit(1);
-  }*/
   // posición inicial
-  int *dir = abrirMemoria(nombre, i, ie, oe);
+  char *dir = abrirMemoria(nombre);
   bool insertado = false;
 
   // saca en dir la posicion inicial del espacio de memoria
@@ -131,9 +122,9 @@ int recorrer(string nombre, int i, int ie ,int oe){
 
 
   while (temp1 < i){
-    int *pos = (temp1 * ie * sizeof(registroentrada)) + dir;
+    char *pos = (temp1 * ie * sizeof(registroentrada)) + dir + sizeof(struct header);
     while(temp2 < ie){
-    int *posn = (pos + (temp2 *sizeof(registroentrada)));
+    char *posn = (pos + (temp2 *sizeof(registroentrada)));
     struct registroentrada *pRegistro = (struct registroentrada *) posn;
     cout << pRegistro->id << pRegistro->tipo << pRegistro->cantidad << endl;
     temp2++;
