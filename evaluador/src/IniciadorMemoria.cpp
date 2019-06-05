@@ -4,7 +4,6 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <semaphore.h>
 #include "elementos.h"
 #include <iostream>
 #include <cstdlib>
