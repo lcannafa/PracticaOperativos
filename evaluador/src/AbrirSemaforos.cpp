@@ -10,51 +10,68 @@ int crearSemaforo(string nombre)
     char *dir = abrirMemoria(nombre);
     struct header *pHeader = (struct header *)dir;
 
-    int i = pHeader->i;
+    int i  = pHeader->i;
     int ie = pHeader->ie;
     int oe = pHeader->oe;
-    int q = pHeader->q;
-    int b = pHeader->b;
-    int d = pHeader->d;
-    int s = pHeader->s;
+    int q  = pHeader->q;
+    int b  = pHeader->b;
+    int d  = pHeader->d;
+    int s  = pHeader->s;
+   
+    int totalsems = 4 + i;
+    sem_t **arraySemMut      = new sem_t *[totalsems];
+    sem_t **arraySemVacio    = new sem_t *[totalsems];
+    sem_t **arraySemLleno    = new sem_t *[totalsems];
+    sem_t **arraySemReactivo = new sem_t *[3];
 
-    sem_t **arraySem0 = new sem_t *[4 + i];
-    sem_t **arraySem1 = new sem_t *[4 + i];
-    sem_t **arraySem2 = new sem_t *[4 + i];
+    string mut  = "Mut"   + nombre;
+    string llen = "Lleno" + nombre;
+    string vac  = "Vacio" + nombre;
+    string reactivo = "Reactivo" + nombre;
 
-    string mut = "Mut";
-    string llen = "LLen";
-    string vac = "Vac";
-
-    for (int j = 0; j < i; j++)
+    for (int j = 0; j < totalsems; j++)
     {
 
         ostringstream namemut;
         namemut << mut << j;
         string realNameMut(namemut.str());
-        arraySem0[j] = sem_open(realNameMut.c_str(), O_CREAT | O_EXCL, 0660, 1);
+        arraySemMut[j] = sem_open(realNameMut.c_str(), O_CREAT | O_EXCL, 0660, 1);
 
         ostringstream namellen;
         namellen << llen << j;
         string realNameLlen(namellen.str());
-        arraySem1[j] = sem_open(realNameLlen.c_str(), O_CREAT | O_EXCL, 0660, 1);
+        arraySemVacio[j] = sem_open(realNameLlen.c_str(), O_CREAT | O_EXCL, 0660, 1);
 
         ostringstream namevac;
         namevac << vac << j;
         string realNameVac(namevac.str());
-        arraySem2[j] = sem_open(realNameVac.c_str(), O_CREAT | O_EXCL, 0660, 1);
+        arraySemLleno[j] = sem_open(realNameVac.c_str(), O_CREAT | O_EXCL, 0660, 1);
 
-        if (arraySem0[j] == SEM_FAILED)
-        {
-            cerr << "Error creando los semaforos 'mutex'" << endl;
+        if( j < 3 ){
+        ostringstream namereact;
+        namereact << reactivo << j;
+        string realNameReact(namereact.str());
+        arraySemReactivo[j] = sem_open(realNameReact.c_str(), O_CREAT | O_EXCL, 0660, 1);
         }
-        if (arraySem1[j] == SEM_FAILED)
+
+        if (arraySemMut[j] == SEM_FAILED)
         {
-            cerr << "Error creando los semaforos 'vacios'" << endl;
+            cerr << "Error creando los semaforos 'Mut'" << endl;
         }
-        if (arraySem2[j] == SEM_FAILED)
+        if (arraySemVacio[j] == SEM_FAILED)
         {
-            cerr << "Error creando los semaforos 'llenos'" << endl;
+            cerr << "Error creando los semaforos 'Vacio'" << endl;
+        }
+        if (arraySemLleno[j] == SEM_FAILED)
+        {
+            cerr << "Error creando los semaforos 'Lleno'" << endl;
+        }
+
+        if( j < 3 ){
+        if (arraySemReactivo[j] == SEM_FAILED)
+        {
+            cerr << "Error creando los semaforos 'Reactivo'" << endl;
+        }
         }
     }
 

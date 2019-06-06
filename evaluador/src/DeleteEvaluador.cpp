@@ -21,16 +21,21 @@ int main(void)
   int i = pHeader->i;
 
   int h = 0;
-  string mut = "Mut";
-  string llen = "LLen";
-  string vac = "Vac";
+  int totalsems = 4 + i;
+    string mut  = "Mut"   + nombre;
+    string llen = "Lleno" + nombre;
+    string vac  = "Vacio" + nombre;
+    string reactivo = "Reactivo" + nombre;
 
   sem_unlink("vacios");
   sem_unlink("llenos");
   sem_unlink("mutex");
+  sem_unlink(( (reactivo + "0")).c_str());
+  sem_unlink(( (reactivo + "1")).c_str());
+  sem_unlink(( (reactivo + "2")).c_str());
   shm_unlink("/buffer");
 
-  while (h < i)
+  while (h < totalsems)
   {
 
     ostringstream namemut;

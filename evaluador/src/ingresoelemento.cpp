@@ -19,8 +19,11 @@ using namespace std;
 int ingresarRegistro(struct registroentrada registro, string nombre)
 {
 
+  //Llama los 3 semaforo requeridos, mutex, vacio lleno para el productor consumidor
   sem_t *arraySem0, *arraySem1, *arraySem2;
-  string mutex = "Mut" + to_string(registro.bandeja);
+  string mutex = "Mut"   + nombre  + to_string(registro.bandeja);
+  string vacio = "Vacio" + nombre  + to_string(registro.bandeja);
+  string lleno = "Lleno" + nombre  + to_string(registro.bandeja);
   arraySem0 = sem_open(mutex.c_str(), 0);
 
   //accede a la memoria compartida
