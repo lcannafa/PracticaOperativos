@@ -1,7 +1,8 @@
+#pragma once
 #include "IniciadorMemoria.cpp"
 #include "ingresoelemento.cpp"
 #include "AbrirSemaforos.cpp"
-
+#include "retirarElemento.cpp"
 using namespace std;
 
 int main()
@@ -14,7 +15,7 @@ int main()
     int b = 5;
     int d = 5;
     int s = 5;
-
+    
     crearEspacio(nombre, i, ie, oe, q, b, d, s);
     crearSemaforo(nombre);
     struct registroentrada test;
@@ -30,6 +31,8 @@ int main()
     test2.tipo = 'D';
     ingresarRegistro(test, nombre);
     ingresarRegistro(test2, nombre);
+    recorrer(nombre);
+    retirarRegistro(2, nombre);
     recorrer(nombre);
     return 0;
 }

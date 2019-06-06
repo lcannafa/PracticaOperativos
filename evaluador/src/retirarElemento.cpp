@@ -12,18 +12,18 @@
 #include <unistd.h>
 #include "elementos.h"
 #include "AbrirMemoria.cpp"
-
+//Aca estamos los melos
 using namespace std;
 // función que le entregan un registro a guardar en la memoria compartida de nombre
 
-int retirarRegistro(struct registroentrada registro, string nombre)
+registrosalida retirarRegistro(int bandeja, string nombre)
 {
 
-  //Llama los 3 semaforo requeridos, mutex, vacio lleno para el productor consumidor
+  //Llama los 3 semaforo requeridos, mutex, vacio lleno para el productor consumidor de las bandejas
   sem_t *arrayMut, *arrayVacio, *arrayLleno;
-  string mutex = "Mut" + nombre + to_string(registro.bandeja);
-  string vacio = "Vacio" + nombre + to_string(registro.bandeja);
-  string lleno = "Lleno" + nombre + to_string(registro.bandeja);
+  string mutex = "Mut" + nombre + to_string(bandeja);
+  string vacio = "Vacio" + nombre + to_string(bandeja);
+  string lleno = "Lleno" + nombre + to_string(bandeja);
   arrayMut = sem_open(mutex.c_str(), 0);
   arrayVacio = sem_open(vacio.c_str(), 1);
   arrayLleno = sem_open(lleno.c_str(), 0);
@@ -35,7 +35,7 @@ int retirarRegistro(struct registroentrada registro, string nombre)
 
   struct header *pHeader = (struct header *)dir;
 
-  int i  = pHeader->i;
+  int i = pHeader->i;
   int ie = pHeader->ie;
   int oe = pHeader->oe;
 
@@ -46,11 +46,14 @@ int retirarRegistro(struct registroentrada registro, string nombre)
   string s = to_string(posSem);
 
   // posición inicial de la bandeja i
-  char *pos = (registro.bandeja * ie * sizeof(registroentrada)) + dir + sizeof(struct header);
+  char *pos = (bandeja * ie * sizeof(registroentrada)) + dir + sizeof(struct header);
+
+  //Crear el registro de salida que devolver
+  struct registrosalida registro;
 
   //hasta que no logre insertar intentar
   // Espera la semaforo para insertar, vacio para saber si hay cupo y el mutex
-  sem_wait(arrayVacio);
+  sem_wait(arrayLleno);
   sem_wait(arrayMut);
 
   // ciclo que avanza dentro de una bandeja usando n, recorre bandeja
@@ -60,17 +63,24 @@ int retirarRegistro(struct registroentrada registro, string nombre)
     char *posn = (pos + (recorrido * sizeof(registroentrada)));
     struct registroentrada *pRegistro = (struct registroentrada *)posn;
 
-    //si logra insertar se sale
-    if (pRegistro->cantidad <= 0)
+    //si encuentro elemento a retirar
+    if (pRegistro->cantidad > 0)
     {
-      pRegistro->bandeja = registro.bandeja;
-      pRegistro->id = registro.id;
-      pRegistro->tipo = registro.tipo;
-      pRegistro->cantidad = registro.cantidad;
+      //asigno los valores a devolver
+      registro.cantidad = pRegistro->cantidad;
+      registro.id = pRegistro->id;
+      registro.tipo = pRegistro->tipo;
+      
+      //Pongo basura donde estaba
+      pRegistro->bandeja = bandeja;
+      pRegistro->id = -1;
+      pRegistro->tipo = 'a';
+      pRegistro->cantidad = -1;
+      //soy consumidor
       sem_post(arrayMut);
-      sem_post(arrayLleno);
-      return EXIT_SUCCESS;
-      return 0;
+      sem_post(arrayVacio);
+
+      return registro;
     }
     // sino sigue avanzando
     else
@@ -79,36 +89,5 @@ int retirarRegistro(struct registroentrada registro, string nombre)
     }
   }
 
-  return 1;
-}
-
-// Método que imprime el contenido de las bandejas de entrada
-int recorrer(string nombre)
-{
-  int temp1 = 0;
-  int temp2 = 0;
-
-  // posición inicial
-  char *dir = abrirMemoria(nombre);
-  bool insertado = false;
-  struct header *pHeader = (struct header *)dir;
-
-  int i = pHeader->i;
-  int ie = pHeader->ie;
-  int oe = pHeader->oe;
-
-  while (temp1 < i)
-  {
-    char *pos = (temp1 * ie * sizeof(registroentrada)) + dir + sizeof(struct header);
-    while (temp2 < ie)
-    {
-      char *posn = (pos + (temp2 * sizeof(registroentrada)));
-      struct registroentrada *pRegistro = (struct registroentrada *)posn;
-      cout << pRegistro->id << pRegistro->tipo << pRegistro->cantidad << endl;
-      temp2++;
-    }
-    temp1++;
-    temp2 = 0;
-  }
-  return 0;
+  return registro;
 }
