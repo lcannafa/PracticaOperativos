@@ -12,13 +12,13 @@
 #include "AbrirSemaforos.cpp"
 using namespace std;
 
-int
-main(void) {
+int main(void)
+{
   string nombre = "buffer";
   char *dir = abrirMemoria(nombre);
-  struct header *pHeader = (struct header *) dir;
-  
-    int i  = pHeader->i;
+  struct header *pHeader = (struct header *)dir;
+
+  int i = pHeader->i;
 
   int h = 0;
   string mut = "Mut";
@@ -30,8 +30,9 @@ main(void) {
   sem_unlink("mutex");
   shm_unlink("/buffer");
 
-  while(h < i){ 
-    
+  while (h < i)
+  {
+
     ostringstream namemut;
     namemut << mut << h;
     string realNameMut(namemut.str());
@@ -41,7 +42,7 @@ main(void) {
     namellen << llen << h;
     string realNameLlen(namellen.str());
     sem_unlink(realNameLlen.c_str());
-    
+
     ostringstream namevac;
     namevac << vac << h;
     string realNameVac(namevac.str());

@@ -13,7 +13,6 @@
 #include "elementos.h"
 #include "AbrirMemoria.cpp"
 
-
 using namespace std;
 // función que le entregan un registro a guardar en la memoria compartida de nombre, pero para facil manipulación requiere i ie y oe de dicha memoria
 
