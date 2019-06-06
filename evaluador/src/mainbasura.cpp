@@ -1,5 +1,9 @@
 #include "IniciadorMemoria.cpp"
 #include "ingresoelemento.cpp"
+#include "AbrirSemaforos.cpp"
+
+using namespace std;
+
 int main (){
     string nombre = "buffer";
     int i= 3;
@@ -11,6 +15,7 @@ int main (){
     int s = 5;
     
     crearEspacio(nombre,i,ie,oe,q,b,d,s);
+    crearSemaforo(nombre);
     struct registroentrada test;
     test.bandeja = 0;
     test.cantidad = 3;
@@ -22,8 +27,8 @@ int main (){
     test2.cantidad = 3;
     test2.id = 5;
     test2.tipo = 'D';
-    ingresarRegistro(test,"buffer");
-    ingresarRegistro(test2,"buffer");
-    recorrer("buffer");
+    ingresarRegistro(test,nombre);
+    ingresarRegistro(test2,nombre);
+    recorrer(nombre);
     return 0;
     }
