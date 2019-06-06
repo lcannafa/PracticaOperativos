@@ -14,17 +14,19 @@
 #include "AbrirMemoria.cpp"
 
 using namespace std;
-// función que le entregan un registro a guardar en la memoria compartida de nombre, pero para facil manipulación requiere i ie y oe de dicha memoria
+// función que le entregan un registro a guardar en la memoria compartida de nombre
 
 int ingresarRegistro(struct registroentrada registro, string nombre)
 {
 
   //Llama los 3 semaforo requeridos, mutex, vacio lleno para el productor consumidor
-  sem_t *arraySem0, *arraySem1, *arraySem2;
+  sem_t *arrayMut, *arrayVacio, *arrayLleno;
   string mutex = "Mut"   + nombre  + to_string(registro.bandeja);
   string vacio = "Vacio" + nombre  + to_string(registro.bandeja);
   string lleno = "Lleno" + nombre  + to_string(registro.bandeja);
-  arraySem0 = sem_open(mutex.c_str(), 0);
+  arrayMut =   sem_open(mutex.c_str(), 0);
+  arrayVacio = sem_open(vacio.c_str(), 1);
+  arrayLleno = sem_open(lleno.c_str(), 0);
 
   //accede a la memoria compartida
   // posición inicial
@@ -38,7 +40,7 @@ int ingresarRegistro(struct registroentrada registro, string nombre)
   int oe = pHeader->oe;
 
   // variable para recorrer la bandeja
-  int n = 0;
+  int recorrido = 0;
   //Semaforos
   int posSem = i;
   string s = to_string(posSem);
@@ -46,55 +48,38 @@ int ingresarRegistro(struct registroentrada registro, string nombre)
   // posición inicial de la bandeja i
   char *pos = (registro.bandeja * ie * sizeof(registroentrada)) + dir + sizeof(struct header);
 
-  for (;;)
-  {
-
     //hasta que no logre insertar intentar
-    while (!insertado)
-    {
-      // Espera la semaforo para insertar
-      //sem_wait(arraySem0);
-      // ciclo que avanza dentro de una bandeja usando n, recorre bandeja
-      while (n < ie)
-      {
+      // Espera la semaforo para insertar, vacio para saber si hay cupo y el mutex
+      sem_wait(arrayVacio);
+      sem_wait(arrayMut);
 
+      // ciclo que avanza dentro de una bandeja usando n, recorre bandeja
+      while (recorrido < ie)
+      {
         //posición en la bandeja
-        char *posn = (pos + (n * sizeof(registroentrada)));
+        char *posn = (pos + (recorrido * sizeof(registroentrada)));
         struct registroentrada *pRegistro = (struct registroentrada *)posn;
 
         //si logra insertar se sale
-        if (pRegistro->cantidad <= 0 && !insertado)
+        if (pRegistro->cantidad <= 0)
         {
           pRegistro->bandeja = registro.bandeja;
           pRegistro->id = registro.id;
           pRegistro->tipo = registro.tipo;
           pRegistro->cantidad = registro.cantidad;
-          insertado = true;
-          sem_post(arraySem0);
+          sem_post(arrayMut);
+          sem_post(arrayLleno);
+          return EXIT_SUCCESS;
           return 0;
         }
         // sino sigue avanzando
         else
         {
-          n++;
+          recorrido++;
         }
       }
-      // si no logro insertar pero recorri la bandeja notifico y espero
-      if (n >= ie && !insertado)
-      {
-        cout << "registro full" << endl;
-        sem_post(arraySem0);
-        sleep(5);
-        n = 0;
-      }
-      if (insertado)
-      {
-        sem_post(arraySem0);
-        return 0;
-      }
-    }
-  }
-  return EXIT_SUCCESS;
+        
+    return 1;
 }
 
 // Método que imprime el contenido de las bandejas de entrada
