@@ -9,20 +9,18 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include "AbrirSemaforos.cpp"
 
 using namespace std;
 
 int crearEspacio(string nombre, int i, int ie, int oe, int q, int b, int d, int s)
 {
 
-  // instanciar los semaforos, el valor define cuanto empieza
-  /*sem_t *vacios = sem_open("vacios", O_CREAT | O_EXCL, 0660, i*ie);
-  sem_t *llenos = sem_open("llenos", O_CREAT | O_EXCL, 0660, 0);
-  sem_t *mutex  = sem_open("mutex", O_CREAT | O_EXCL, 0660, 1);
-*/
+  
 
   // Abrir espacio de memoria para usar, usando el nombre n
   int fd = shm_open(nombre.c_str(), O_RDWR | O_CREAT | O_EXCL, 0660);
+  crearSemaforo(nombre);
 
   if (fd < 0)
   {
