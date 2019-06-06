@@ -20,7 +20,7 @@ int crearEspacio(string nombre, int i, int ie, int oe, int q, int b, int d, int 
 
   // Abrir espacio de memoria para usar, usando el nombre n
   int fd = shm_open(nombre.c_str(), O_RDWR | O_CREAT | O_EXCL, 0660);
-  crearSemaforo(nombre);
+
 
   if (fd < 0)
   {
@@ -56,7 +56,11 @@ int crearEspacio(string nombre, int i, int ie, int oe, int q, int b, int d, int 
   pHeader->s = s;
   strcpy(pHeader->n, nombre.c_str());
 
+  
+
   close(fd);
+
+  //crearSemaforo(nombre);
 
   return EXIT_SUCCESS;
 }
