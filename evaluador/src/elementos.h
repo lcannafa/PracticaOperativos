@@ -13,6 +13,10 @@ struct header{
   char n[30];
 };
 
+struct headerQ{
+  int q;
+};
+
 
 struct registroentrada {
   int bandeja;
