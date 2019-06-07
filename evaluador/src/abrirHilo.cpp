@@ -1,55 +1,80 @@
-#include <cerrno>
-#include <stdio.h>
-#include <cstring>
-#include <sstream>
 #include <pthread.h>
-#include <semaphore.h>
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <stdio.h>
+#include <bits/stdc++.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include "elementos.h"
 #include "AbrirMemoria.cpp"
 #include "retirarElemento.cpp"
+#include "BandejasQ.cpp"
+#include "retiroBandejaQ.cpp"
 
 using namespace std;
-
 struct banNam
 {
     int bandeja;
-    string name;
+    string nombre;
 };
-
-//Método debugging
 void *procesador(void *bandej)
 {
+
+    banNam *producto = (banNam *)bandej;
+    int num_bandeja = producto->bandeja;
+    string nom_memoria = producto->nombre;
+
     for (;;)
     {
-        struct banNam *producto = (struct banNam *)bandej;
-        //printf("%d\n", producto -> bandeja);
-        //cout << producto->name << "\n" << endl;
-        struct registrosalida registro = retirarRegistro(producto->bandeja, producto->name);
-        // insertarRegistroSalida(registrosalida, nombre)
+        registrosalida registro = retirarRegistro(num_bandeja, nom_memoria);
+        ingresarBandejaQ(registro, nom_memoria);
+
     }
-    return NULL;
+
+    cout << "Sali?" << endl;
+
+    pthread_exit(NULL);
 }
 
-int instancearHilos(int i, string nombre)
+void crearHilo(string n)
 {
-   
+    //accede a la memoria compartida
+    // posición inicial
+    char *dir = abrirMemoria(n);
+
+    struct header *pHeader = (struct header *)dir;
+
+    int i = pHeader->i;
+
+    // Instancia los elementos que van a hacer parte de los hilos
+    // Instancia el arreglo de los hilos.
     pthread_t hiloP[i];
-    struct banNam bande;
-    bande.bandeja = i;
-    bande.name = nombre;
-    string llen = "Hilo" + nombre;
-    for (int n = 0; n < i; n++)
-    {
+    banNam bande;
+    bande.nombre = n;
+    string n_Hilo = "Hilo" + n;
 
+    // Crea los hilos y les asigna la funcion
+    for (int m = 0; m < i; ++m)
+    {
+        bande.bandeja = m;
         ostringstream namellen;
-        namellen << llen << n;
+        namellen << n_Hilo << m;
         string realNameLlen(namellen.str());
-        pthread_create(&hiloP[n], NULL, procesador, (void *)&bande);
+        pthread_create(&hiloP[m], NULL, procesador, (void *)&bande);
+        sleep(0.1);
     }
-    if (pthread_join(hiloP[0], NULL))
-    {
 
-        fprintf(stderr, "Error joining thread\n");
-        return 2;
-    }
-    printf("Hace hilo x:%d\n", x);
+    //ESTO SE BORRA, SE DEJA AHORA POR DEBUGGER
+
+    // if (pthread_join(hiloP[0], NULL))
+    // {
+    //     fprintf(stderr, "Error joining thread\n");
+    //     return;
+    // }
+
+    return;
 }

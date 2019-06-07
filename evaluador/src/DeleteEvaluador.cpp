@@ -26,7 +26,7 @@ int main(void)
   string llen = "Lleno" + nombre;
   string vac = "Vacio" + nombre;
   string reactivo = "Reactivo" + nombre;
-
+  string nombreq = nombre + "Q";
   sem_unlink("vacios");
   sem_unlink("llenos");
   sem_unlink("mutex");
@@ -34,6 +34,7 @@ int main(void)
   sem_unlink(((reactivo + "1")).c_str());
   sem_unlink(((reactivo + "2")).c_str());
   shm_unlink("/buffer");
+  shm_unlink(nombreq.c_str());
 
   while (h < totalsems)
   {

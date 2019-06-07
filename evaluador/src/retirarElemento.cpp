@@ -73,9 +73,9 @@ registrosalida retirarRegistro(int bandeja, string nombre)
       
       //Pongo basura donde estaba
       pRegistro->bandeja = bandeja;
-      pRegistro->id = -1;
-      pRegistro->tipo = 'a';
-      pRegistro->cantidad = -1;
+      pRegistro->id = 0;
+      pRegistro->tipo = '0';
+      pRegistro->cantidad = 0;
       //soy consumidor
       sem_post(arrayMut);
       sem_post(arrayVacio);
