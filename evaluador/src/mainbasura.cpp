@@ -2,6 +2,7 @@
 #include "ingresoelemento.cpp"
 #include "AbrirSemaforos.cpp"
 #include "retirarElemento.cpp"
+#include "retiroBandejaQ.cpp"
 #include "BandejasQ.cpp"
 #include "abrirHilo.cpp"
 using namespace std;
@@ -41,6 +42,11 @@ int main()
 
     recorrer(nombre);
     crearHilo(nombre);
+    cout << "" << endl;
+    cout << "" << endl;
+    sleep(1);
+    recorrerQ(nombre);
+    retirarRegistroDeQ('D',nombre);
     cout << "" << endl;
     cout << "" << endl;
     sleep(1);

@@ -49,6 +49,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
   string vacio = "Vacio" + nombre + to_string(pos_tipo);
   string lleno = "Lleno" + nombre + to_string(pos_tipo);
   string reactivo = "Reactivo" + nombre + to_string(pos_tipo - i);
+  cout << mutex << lleno << endl;
   arrayMut = sem_open(mutex.c_str(), 0);
   arrayVacio = sem_open(vacio.c_str(), 1);
   arrayLleno = sem_open(lleno.c_str(), 0);
