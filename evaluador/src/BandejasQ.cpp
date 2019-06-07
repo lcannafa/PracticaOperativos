@@ -40,7 +40,7 @@ int crearQ(string nombre)
     }
     char *dirQ;
 
-    if ((dirQ = (char *)mmap(NULL, sizeof(headerQ), PROT_READ | PROT_WRITE, MAP_SHARED,fd, 0)) == MAP_FAILED)
+    if ((dirQ = (char *)mmap(NULL, sizeof(headerQ), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0)) == MAP_FAILED)
     {
         cerr << "Error mapeando la memoria compartida: Q3"
              << errno << strerror(errno) << endl;
@@ -68,7 +68,7 @@ char *abrirQ(string nombre)
 
     char *dir;
 
-    if ((dir = (char *)(mmap(NULL, sizeof(headerQ), PROT_READ | PROT_WRITE, MAP_SHARED,fd, 0))) == MAP_FAILED)
+    if ((dir = (char *)(mmap(NULL, sizeof(headerQ), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0))) == MAP_FAILED)
     {
         cerr << "Error mapeando la memoria compartida: Q5"
              << errno << strerror(errno) << endl;
@@ -81,7 +81,7 @@ char *abrirQ(string nombre)
     munmap((void *)pHeaderQ, sizeof(headerQ));
     size_t memorysize = sizeof(headerQ) + (sizeof(registrosalida) * q * 3);
 
-    if ((dir = (char *)(mmap(NULL, memorysize, PROT_READ | PROT_WRITE, MAP_SHARED,fd, 0))) == MAP_FAILED)
+    if ((dir = (char *)(mmap(NULL, memorysize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0))) == MAP_FAILED)
     {
         cerr << "Error mapeando la memoria compartida: Q6"
              << errno << strerror(errno) << endl;
@@ -90,11 +90,9 @@ char *abrirQ(string nombre)
     return dir;
 }
 
-
-
 int recorrerQ(string nombre)
-{   
-   
+{
+
     int temp1 = 0;
     int temp2 = 0;
     int recorrido = 0;
@@ -107,22 +105,20 @@ int recorrerQ(string nombre)
     while (recorrido < 3)
     {
         char *pos = dire + sizeof(struct headerQ) + (recorrido * sizeof(registrosalida) * q);
-        
-        while(temp2 < q ){
-        char *posn = pos + (temp2 * sizeof(registrosalida));
-        registrosalida *pRegistroSalida = (registrosalida *)posn;
-        cout << pRegistroSalida->id << pRegistroSalida->tipo << pRegistroSalida->cantidad << endl;
-        temp2++;
+
+        while (temp2 < q)
+        {
+            char *posn = pos + (temp2 * sizeof(registrosalida));
+            registrosalida *pRegistroSalida = (registrosalida *)posn;
+            cout << pRegistroSalida->id << pRegistroSalida->tipo << pRegistroSalida->cantidad << endl;
+            temp2++;
         }
-        
+
         recorrido++;
         temp2 = 0;
     }
     return 0;
 }
-
-
-
 
 int ingresarBandejaQ(struct registrosalida registro, string nombre)
 {
@@ -170,7 +166,7 @@ int ingresarBandejaQ(struct registrosalida registro, string nombre)
 
     // posición inicial de la bandeja según el tipo
     int posBandeja = tipopipo - i;
-    char *pos = dire + sizeof(headerQ) + (posBandeja * sizeof(registrosalida) * q );
+    char *pos = dire + sizeof(headerQ) + (posBandeja * sizeof(registrosalida) * q);
 
     //hasta que no logre insertar intentar
     // Espera la semaforo para insertar, vacio para saber si hay cupo y el mutex
