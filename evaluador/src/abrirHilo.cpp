@@ -9,7 +9,8 @@
 
 using namespace std;
 
-struct banNam {
+struct banNam
+{
     int bandeja;
     string name;
 };
@@ -17,30 +18,28 @@ struct banNam {
 //Método debugging
 void *procesador(void *bandej)
 {
-
-   struct banNam *producto = (struct banNam *)bandej;
-   
-   printf("%d\n", producto -> bandeja);
-   cout << producto->name << "\n" << endl;
-   
-   
-   return NULL;
-
+    for (;;)
+    {
+        struct banNam *producto = (struct banNam *)bandej;
+        //printf("%d\n", producto -> bandeja);
+        //cout << producto->name << "\n" << endl;
+        struct registrosalida registro = retirarRegistro(producto->bandeja, producto->name);
+        // insertarRegistroSalida(registrosalida, nombre)
+    }
+    return NULL;
 }
 
-int main(int i, string nombre)
+int instancearHilos(int i, string nombre)
 {
-    i=2;
-    nombre = "Lorena";
-    int x = 0;
+   
     pthread_t hiloP[i];
     struct banNam bande;
     bande.bandeja = i;
     bande.name = nombre;
-    string llen = "Hilo";
+    string llen = "Hilo" + nombre;
     for (int n = 0; n < i; n++)
     {
-        
+
         ostringstream namellen;
         namellen << llen << n;
         string realNameLlen(namellen.str());
@@ -52,8 +51,5 @@ int main(int i, string nombre)
         fprintf(stderr, "Error joining thread\n");
         return 2;
     }
-    printf("Hace hilo x:%d\n",x);
-        
+    printf("Hace hilo x:%d\n", x);
 }
-
-
