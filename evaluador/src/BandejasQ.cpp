@@ -31,8 +31,8 @@ int crearQ(string nombre)
              << errno << strerror(errno) << endl;
         exit(1);
     }
-
-    if (ftruncate(fd, sizeof(headerQ) != 0))
+    //Acorta la region de memoria, de acuerdo al tamaño requerido
+    if (ftruncate(fd, sizeof(headerQ) != 0)) 
     {
         cerr << "Error creando la memoria compartida: Q2"
              << errno << strerror(errno) << endl;
