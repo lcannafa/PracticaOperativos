@@ -58,7 +58,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
   int recorrido = 0;
 
   // posición inicial de la bandeja B|D|S
-  char *pos = ((pos_tipo - i) * sizeof(registrosalida)) + dir + sizeof(header);
+  char *pos = ((pos_tipo - i) * sizeof(registrosalida)) + dirQ + sizeof(header);
 
   //Crear el registro de salida que d
   registrosalida registro;
@@ -75,12 +75,10 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
     char *posn = (pos + (recorrido * sizeof(registrosalida)));
     registrosalida *pRegistro = (registrosalida *)posn;
     
-    cout << "Registro actual: " << pRegistro->id << " " << pRegistro->tipo << endl;
 
     //si encuentro elemento a retirar
     if (pRegistro->cantidad > 0)
     {
-      cout << "Retirando" << endl;
 
       //asigno los valores a devolver
       registro.cantidad = pRegistro->cantidad;
@@ -94,7 +92,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
       pRegistro->cantidad = -1;
       sem_post(arrayMut);
       sem_post(arrayVacio);
-
+      
       return registro;
     }
     else
