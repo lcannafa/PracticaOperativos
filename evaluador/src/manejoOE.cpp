@@ -73,7 +73,7 @@ int ingresarSalida(registrosalida registro, string nombre)
   return 1;
 }
 
-registrosalida retirarSalida(int bandeja, string nombre)
+/*registrosalida retirarSalida(int bandeja, string nombre)
 {
 
   //Llama los 3 semaforo requeridos, mutex, vacio lleno para el productor consumidor de las bandejas
@@ -143,6 +143,7 @@ registrosalida retirarSalida(int bandeja, string nombre)
 
   return registro;
 }
+*/
 
 int recorrerOE(string nombre)
 {

@@ -27,6 +27,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
 
   int q = pHeader->q;
   int i = pHeader->i;
+
   //Llama los 3 semaforo requeridos, mutex, vacio lleno para el productor consumidor de las bandejas
   sem_t *arrayMut, *arrayVacio, *arrayLleno, *arrayReact;
   int pos_tipo;
@@ -52,7 +53,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
   string vacio = "Vacio" + nombre + to_string(pos_tipo);
   string lleno = "Lleno" + nombre + to_string(pos_tipo);
   string reactivo = "Reactivo" + nombre + to_string(pos_bandejaQ);
-  
+
   arrayMut = sem_open(mutex.c_str(), 0);
   arrayVacio = sem_open(vacio.c_str(), 0);
   arrayLleno = sem_open(lleno.c_str(), 0);

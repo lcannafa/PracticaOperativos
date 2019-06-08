@@ -19,10 +19,15 @@ int main()
     int d = 5;
     int s = 5;
 
-    cout << "1" << endl;
+    cout << "Inicio" << endl;
     crearEspacio(nombre, i, ie, oe, q, b, d, s);
     crearSemaforo(nombre);
     crearQ(nombre);
+    crearHilo(nombre);
+    sleep(1);
+    crearHiloProcesadores(nombre);
+
+
     registroentrada testD;
     testD.bandeja = 0;
     testD.cantidad = 5;
@@ -44,32 +49,13 @@ int main()
     ingresarRegistro(testD, nombre);
     ingresarRegistro(testB, nombre);
     ingresarRegistro(testS, nombre);
-    
-
-    recorrer(nombre);
-    crearHilo(nombre);
+    //crearHilo(nombre);
+ 
+    sleep(5);
     cout << "" << endl;
-    cout << "Bandejas Q" << endl;
+    cout << " Bandejas OE Resultado" << endl;
     cout << "" << endl;
-    sleep(2);
-    recorrerQ(nombre);
-    registrosalida D = retirarRegistroDeQ('D', nombre);
-    registrosalida B = retirarRegistroDeQ('B', nombre);
-    registrosalida S = retirarRegistroDeQ('S', nombre);
-    cout << "" << endl;
-    cout << " Bandejas Q x2" << endl;
-    cout << "" << endl;
-    sleep(2);
-    recorrerQ(nombre);
-
-    cout << "" << endl;
-    cout << " Bandeja OE" << endl;
-    cout << "" << endl;
-    ingresarSalida(D, nombre);
-    ingresarSalida(B, nombre);
-    ingresarSalida(S, nombre);
     recorrerOE(nombre);
-
 
     return 0;
 }
