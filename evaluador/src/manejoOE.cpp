@@ -59,6 +59,7 @@ int ingresarSalida(registrosalida registro, string nombre)
       pRegistro->id = registro.id;
       pRegistro->tipo = registro.tipo;
       pRegistro->cantidad = registro.cantidad;
+      pRegistro->bandeja = registro.bandeja;
       sem_post(arrayMut);
       sem_post(arrayLleno);
       return EXIT_SUCCESS;

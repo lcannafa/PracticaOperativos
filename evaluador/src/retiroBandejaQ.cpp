@@ -89,12 +89,14 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
       registro.cantidad = pRegistro->cantidad;
       registro.id = pRegistro->id;
       registro.tipo = pRegistro->tipo;
+      registro.bandeja = pRegistro->bandeja;
 
       //Pongo basura donde estaba
       //pRegistro->bandeja = bandeja;
       pRegistro->id = -1;
       pRegistro->tipo = 'a';
       pRegistro->cantidad = -1;
+      pRegistro->bandeja = -1;
       sem_post(arrayMut);
       sem_post(arrayVacio);
 

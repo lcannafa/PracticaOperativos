@@ -49,7 +49,6 @@ int main()
     ingresarRegistro(testD, nombre);
     ingresarRegistro(testB, nombre);
     ingresarRegistro(testS, nombre);
-    //crearHilo(nombre);
  
     sleep(5);
     cout << "" << endl;

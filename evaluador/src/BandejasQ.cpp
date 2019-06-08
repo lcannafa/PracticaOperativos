@@ -184,6 +184,7 @@ int ingresarBandejaQ( registrosalida registro, string nombre)
             pRegistroSalida->id = registro.id;
             pRegistroSalida->tipo = registro.tipo;
             pRegistroSalida->cantidad = registro.cantidad;
+            pRegistroSalida->bandeja = registro.bandeja;
             sem_post(arrayMut);
             sem_post(arrayLleno);
             return EXIT_SUCCESS;

@@ -70,6 +70,7 @@ registrosalida retirarRegistro(int bandeja, string nombre)
       registro.cantidad = pRegistro->cantidad;
       registro.id = pRegistro->id;
       registro.tipo = pRegistro->tipo;
+      registro.bandeja = pRegistro->tipo;
       
       //Pongo basura donde estaba
       pRegistro->bandeja = bandeja;
