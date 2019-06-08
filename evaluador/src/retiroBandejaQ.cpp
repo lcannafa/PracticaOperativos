@@ -22,11 +22,9 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
 {
   //accede a la memoria compartida
   // posición inicial
-  char *dir = abrirMemoria(nombre);
   char *dirQ = abrirQ(nombre);
-  header *pHeader = (header *)dir;
+  headerQ *pHeader = (headerQ *)dirQ;
 
-  int ie = pHeader->ie;
   int q = pHeader->q;
   int i = pHeader->i;
   //Llama los 3 semaforo requeridos, mutex, vacio lleno para el productor consumidor de las bandejas
@@ -50,7 +48,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
   string lleno = "Lleno" + nombre + to_string(pos_tipo);
   string reactivo = "Reactivo" + nombre + to_string(pos_tipo - i);
   arrayMut = sem_open(mutex.c_str(), 0);
-  arrayVacio = sem_open(vacio.c_str(), 1);
+  arrayVacio = sem_open(vacio.c_str(), 0);
   arrayLleno = sem_open(lleno.c_str(), 0);
   arrayReact = sem_open(reactivo.c_str(), 0);
 
@@ -58,7 +56,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
   int recorrido = 0;
 
   // posición inicial de la bandeja B|D|S
-  char *pos = ((pos_tipo - i) * sizeof(registrosalida)) + dirQ + sizeof(header);
+  char *pos = ((pos_tipo - i) * sizeof(registrosalida)) + dirQ + sizeof(headerQ);
 
   //Crear el registro de salida que d
   registrosalida registro;
@@ -92,7 +90,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
       pRegistro->cantidad = -1;
       sem_post(arrayMut);
       sem_post(arrayVacio);
-      
+
       return registro;
     }
     else

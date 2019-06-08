@@ -20,6 +20,7 @@ int crearQ(string nombre)
     char *dir = abrirMemoria(nombre);
     struct header *pHeader = (struct header *)dir;
     int q = pHeader->q;
+    int i = pHeader->i;
 
     // Abrir espacio de memoria para usar, usando el nombre n
     nombre = nombre + "Q";
@@ -49,6 +50,7 @@ int crearQ(string nombre)
 
     headerQ *pHeaderQ = (headerQ *)dirQ;
     pHeaderQ->q = q;
+    pHeaderQ->i = i;
 
     close(fd);
     return EXIT_SUCCESS;
@@ -77,6 +79,7 @@ char *abrirQ(string nombre)
 
     headerQ *pHeaderQ = (headerQ *)dir;
     int q = pHeaderQ->q;
+    int i = pHeaderQ->i;
 
     munmap((void *)pHeaderQ, sizeof(headerQ));
     size_t memorysize = sizeof(headerQ) + (sizeof(registrosalida) * q * 3);
@@ -124,9 +127,12 @@ int ingresarBandejaQ(struct registrosalida registro, string nombre)
 {
     //accede a la memoria compartida
     // posición inicial
-    char *dir = abrirMemoria(nombre);
-    struct header *pHeader = (struct header *)dir;
-    int i = pHeader->i;
+    char *dire = abrirQ(nombre);
+
+    headerQ *pHeaderQ = (struct headerQ *)dire;
+
+    int q = pHeaderQ->q;
+    int i = pHeaderQ->i;
 
     //Llama los 3 semaforo requeridos, mutex, vacio lleno para el productor consumidor
     sem_t *arrayMut, *arrayVacio, *arrayLleno;
@@ -147,16 +153,10 @@ int ingresarBandejaQ(struct registrosalida registro, string nombre)
     string vacio = "Vacio" + nombre + to_string(tipopipo);
     string lleno = "Lleno" + nombre + to_string(tipopipo);
     arrayMut = sem_open(mutex.c_str(), 0);
-    arrayVacio = sem_open(vacio.c_str(), 1);
+    arrayVacio = sem_open(vacio.c_str(), 0);
     arrayLleno = sem_open(lleno.c_str(), 0);
 
-    //accede a la memoria compartida
-    // posición inicial
-    char *dire = abrirQ(nombre);
 
-    headerQ *pHeaderQ = (struct headerQ *)dire;
-
-    int q = pHeaderQ->q;
 
     // variable para recorrer la bandeja
     int recorrido = 0;

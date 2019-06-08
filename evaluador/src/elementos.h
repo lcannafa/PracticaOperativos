@@ -16,6 +16,7 @@ struct header{
 //
 struct headerQ{
   int q;
+  int i;
 };
 
 //Contenido de una posicion ie en la bandeja de entrada
