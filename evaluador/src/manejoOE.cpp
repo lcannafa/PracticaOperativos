@@ -16,14 +16,14 @@
 using namespace std;
 // función que le entregan un registro a guardar en la memoria compartida de nombre
 
-int ingresarRegistro(registroentrada registro, string nombre)
+int ingresarRegistro(registrosalida registro, string nombre)
 {
 
   //Llama los 3 semaforo requeridos, mutex, vacio lleno para el productor consumidor
   sem_t *arrayMut, *arrayVacio, *arrayLleno;
-  string mutex = "Mut" + nombre + to_string(registro.bandeja);
-  string vacio = "Vacio" + nombre + to_string(registro.bandeja);
-  string lleno = "Lleno" + nombre + to_string(registro.bandeja);
+  string mutex = "Mut" + nombre + to_string(i);
+  string vacio = "Vacio" + nombre + to_string(i);
+  string lleno = "Lleno" + nombre + to_string(i);
   arrayMut = sem_open(mutex.c_str(), 0);
   arrayVacio = sem_open(vacio.c_str(), 1);
   arrayLleno = sem_open(lleno.c_str(), 0);
@@ -46,7 +46,7 @@ int ingresarRegistro(registroentrada registro, string nombre)
   string s = to_string(posSem);
 
   // posición inicial de la bandeja i
-  char *pos = (registro.bandeja * ie * sizeof(registroentrada)) + dir + sizeof( header);
+  char *pos = (i * ie * sizeof(registroentrada)) + dir + sizeof( header);
 
   //hasta que no logre insertar intentar
   // Espera la semaforo para insertar, vacio para saber si hay cupo y el mutex
@@ -57,13 +57,12 @@ int ingresarRegistro(registroentrada registro, string nombre)
   while (recorrido < ie)
   {
     //posición en la bandeja
-    char *posn = (pos + (recorrido * sizeof(registroentrada)));
-     registroentrada *pRegistro = ( registroentrada *)posn;
+    char *posn = (pos + (recorrido * sizeof(registrosalida)));
+     registrosalida *pRegistro = ( registrosalida *)posn;
 
     //si logra insertar se sale
     if (pRegistro->cantidad <= 0)
     {
-      pRegistro->bandeja = registro.bandeja;
       pRegistro->id = registro.id;
       pRegistro->tipo = registro.tipo;
       pRegistro->cantidad = registro.cantidad;
@@ -126,8 +125,8 @@ registrosalida retirarRegistro(int bandeja, string nombre)
   while (recorrido < ie)
   {
     //posición en la bandeja
-    char *posn = (pos + (recorrido * sizeof(registroentrada)));
-    registroentrada *pRegistro = (registroentrada *)posn;
+    char *posn = (pos + (recorrido * sizeof(registrosalida)));
+    registrosalida *pRegistro = (registrosalida *)posn;
 
     //si encuentro elemento a retirar
     if (pRegistro->cantidad > 0)
