@@ -21,7 +21,7 @@ int main(void)
   int i = pHeader->i;
 
   int h = 0;
-  string nameMemory = "/" + nombre;
+  string nameMemory = nombre;
   int totalsems = 4 + i;
   string mut = "Mut" + nombre;
   string llen = "Lleno" + nombre;

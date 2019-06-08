@@ -18,7 +18,7 @@ char *abrirMemoria(string nombre)
     int fd = shm_open(nombre.c_str(), O_RDWR, 0660);
     if (fd < 0)
     {
-        cerr << "Error abriendo la memoria compartida: 4"
+        cerr << "Error abriendo la memoria compartida: 4 "
              << errno << strerror(errno) << endl;
         exit(1);
     }

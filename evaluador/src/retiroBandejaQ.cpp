@@ -58,7 +58,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
   int recorrido = 0;
 
   // posición inicial de la bandeja B|D|S
-  char *pos = ((pos_tipo - i) * sizeof(registrosalida)) + dir + sizeof(struct header);
+  char *pos = ((pos_tipo - i) * sizeof(registrosalida)) + dir + sizeof(header);
 
   //Crear el registro de salida que d
   registrosalida registro;
@@ -73,7 +73,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
 
     //posición en la bandeja
     char *posn = (pos + (recorrido * sizeof(registrosalida)));
-    struct registroentrada *pRegistro = (struct registroentrada *)posn;
+    registrosalida *pRegistro = (registrosalida *)posn;
     
     cout << "Registro actual: " << pRegistro->id << " " << pRegistro->tipo << endl;
 

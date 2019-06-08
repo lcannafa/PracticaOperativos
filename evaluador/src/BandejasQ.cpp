@@ -177,7 +177,7 @@ int ingresarBandejaQ(struct registrosalida registro, string nombre)
     {
         //posición en la bandeja
         char *posn = (pos + (recorrido * sizeof(registrosalida)));
-        struct registrosalida *pRegistroSalida = (struct registrosalida *)posn;
+        registrosalida *pRegistroSalida = (registrosalida *)posn;
         //si logra insertar se sale
         if (pRegistroSalida->cantidad <= 0)
         {

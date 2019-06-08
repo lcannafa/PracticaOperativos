@@ -20,6 +20,7 @@ int main()
 
     crearEspacio(nombre, i, ie, oe, q, b, d, s);
     crearSemaforo(nombre);
+    crearQ(nombre);
     struct registroentrada test;
     test.bandeja = 0;
     test.cantidad = 3;
@@ -32,13 +33,8 @@ int main()
     test2.id = 5;
     test2.tipo = 'D';
     //Holo
-    struct registrosalida testsalida1;
-    testsalida1.cantidad = 3;
-    testsalida1.id = 99;
-    testsalida1.tipo = 'D';
     ingresarRegistro(test, nombre);
     ingresarRegistro(test2, nombre);
-    crearQ(nombre);
 
     recorrer(nombre);
     crearHilo(nombre);
