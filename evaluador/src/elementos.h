@@ -32,6 +32,7 @@ struct registroentrada {
 //Contenido de una posicion en la bandeja de salida.
 struct registrosalida{
   int id;
+  int bandeja;
   char tipo;
   int cantidad;
 };

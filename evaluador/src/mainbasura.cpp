@@ -31,8 +31,7 @@ int main()
     test2.bandeja = 2;
     test2.cantidad = 3;
     test2.id = 5;
-    test2.tipo = 'D';
-    //Holo
+    test2.tipo = 'B';
     ingresarRegistro(test, nombre);
     ingresarRegistro(test2, nombre);
 

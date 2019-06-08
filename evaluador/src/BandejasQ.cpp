@@ -18,7 +18,7 @@ int crearQ(string nombre)
     //accede a la memoria compartida
     // posición inicial
     char *dir = abrirMemoria(nombre);
-    struct header *pHeader = (struct header *)dir;
+     header *pHeader = ( header *)dir;
     int q = pHeader->q;
     int i = pHeader->i;
 
@@ -107,7 +107,7 @@ int recorrerQ(string nombre)
 
     while (recorrido < 3)
     {
-        char *pos = dire + sizeof(struct headerQ) + (recorrido * sizeof(registrosalida) * q);
+        char *pos = dire + sizeof( headerQ) + (recorrido * sizeof(registrosalida) * q);
 
         while (temp2 < q)
         {
@@ -123,13 +123,13 @@ int recorrerQ(string nombre)
     return 0;
 }
 
-int ingresarBandejaQ(struct registrosalida registro, string nombre)
+int ingresarBandejaQ( registrosalida registro, string nombre)
 {
     //accede a la memoria compartida
     // posición inicial
     char *dire = abrirQ(nombre);
 
-    headerQ *pHeaderQ = (struct headerQ *)dire;
+    headerQ *pHeaderQ = ( headerQ *)dire;
 
     int q = pHeaderQ->q;
     int i = pHeaderQ->i;

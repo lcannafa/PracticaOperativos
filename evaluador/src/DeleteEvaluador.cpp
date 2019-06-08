@@ -1,4 +1,3 @@
-#pragma once
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -28,9 +27,6 @@ int main(void)
   string vac = "Vacio" + nombre;
   string reactivo = "Reactivo" + nombre;
   string nombreq = nombre + "Q";
-  sem_unlink("vacios");
-  sem_unlink("llenos");
-  sem_unlink("mutex");
   sem_unlink(((reactivo + "0")).c_str());
   sem_unlink(((reactivo + "1")).c_str());
   sem_unlink(((reactivo + "2")).c_str());
