@@ -30,23 +30,29 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
   //Llama los 3 semaforo requeridos, mutex, vacio lleno para el productor consumidor de las bandejas
   sem_t *arrayMut, *arrayVacio, *arrayLleno, *arrayReact;
   int pos_tipo;
+  int pos_bandejaQ;
   if (tipo == 'B')
   {
     pos_tipo = i;
+    pos_bandejaQ = 0;
+
   }
   if (tipo == 'D')
   {
     pos_tipo = i + 1;
+    pos_bandejaQ = 1;
   }
   if (tipo == 'S')
   {
     pos_tipo = i + 2;
+    pos_bandejaQ = 2;
   }
 
   string mutex = "Mut" + nombre + to_string(pos_tipo);
   string vacio = "Vacio" + nombre + to_string(pos_tipo);
   string lleno = "Lleno" + nombre + to_string(pos_tipo);
-  string reactivo = "Reactivo" + nombre + to_string(pos_tipo - i);
+  string reactivo = "Reactivo" + nombre + to_string(pos_bandejaQ);
+  
   arrayMut = sem_open(mutex.c_str(), 0);
   arrayVacio = sem_open(vacio.c_str(), 0);
   arrayLleno = sem_open(lleno.c_str(), 0);
@@ -56,7 +62,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
   int recorrido = 0;
 
   // posición inicial de la bandeja B|D|S
-  char *pos = ((pos_tipo - i) * sizeof(registrosalida)) + dirQ + sizeof(headerQ);
+  char *pos = dirQ + sizeof(headerQ) + (pos_bandejaQ * q * sizeof(registrosalida));
 
   //Crear el registro de salida que d
   registrosalida registro;
