@@ -33,7 +33,7 @@ registrosalida retirarRegistro(int bandeja, string nombre)
   char *dir = abrirMemoria(nombre);
   bool insertado = false;
 
-  struct header *pHeader = (struct header *)dir;
+  header *pHeader = (header *)dir;
 
   int i = pHeader->i;
   int ie = pHeader->ie;
@@ -46,10 +46,10 @@ registrosalida retirarRegistro(int bandeja, string nombre)
   string s = to_string(posSem);
 
   // posición inicial de la bandeja i
-  char *pos = (bandeja * ie * sizeof(registroentrada)) + dir + sizeof(struct header);
+  char *pos = (bandeja * ie * sizeof(registroentrada)) + dir + sizeof(header);
 
   //Crear el registro de salida que devolver
-  struct registrosalida registro;
+  registrosalida registro;
 
   //hasta que no logre insertar intentar
   // Espera la semaforo para insertar, vacio para saber si hay cupo y el mutex
@@ -61,7 +61,7 @@ registrosalida retirarRegistro(int bandeja, string nombre)
   {
     //posición en la bandeja
     char *posn = (pos + (recorrido * sizeof(registroentrada)));
-    struct registroentrada *pRegistro = (struct registroentrada *)posn;
+    registroentrada *pRegistro = (registroentrada *)posn;
 
     //si encuentro elemento a retirar
     if (pRegistro->cantidad > 0)
