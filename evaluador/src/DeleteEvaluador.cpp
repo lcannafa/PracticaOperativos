@@ -14,13 +14,14 @@ using namespace std;
 
 int main(void)
 {
-  string nombre = "buffer";
+  string nombre = "evaluator";
   char *dir = abrirMemoria(nombre);
   struct header *pHeader = (struct header *)dir;
 
   int i = pHeader->i;
 
   int h = 0;
+  string nameMemory = "/" + nombre;
   int totalsems = 4 + i;
   string mut = "Mut" + nombre;
   string llen = "Lleno" + nombre;
@@ -33,7 +34,7 @@ int main(void)
   sem_unlink(((reactivo + "0")).c_str());
   sem_unlink(((reactivo + "1")).c_str());
   sem_unlink(((reactivo + "2")).c_str());
-  shm_unlink("/buffer");
+  shm_unlink(nameMemory.c_str());
   shm_unlink(nombreq.c_str());
 
   while (h < totalsems)

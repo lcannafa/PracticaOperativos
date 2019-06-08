@@ -9,7 +9,7 @@ using namespace std;
 
 int main()
 {
-    string nombre = "buffer";
+    string nombre = "evaluator";
     int i = 3;
     int ie = 5;
     int oe = 10;
@@ -44,12 +44,12 @@ int main()
     crearHilo(nombre);
     cout << "" << endl;
     cout << "" << endl;
-    sleep(1);
+    sleep(3);
     recorrerQ(nombre);
     retirarRegistroDeQ('D',nombre);
     cout << "" << endl;
     cout << "" << endl;
-    sleep(1);
+    sleep(3);
     recorrerQ(nombre);
 
     return 0;
