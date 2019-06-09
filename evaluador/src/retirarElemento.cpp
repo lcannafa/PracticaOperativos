@@ -41,9 +41,6 @@ registrosalida retirarRegistro(int bandeja, string nombre)
 
   // variable para recorrer la bandeja
   int recorrido = 0;
-  //Semaforos
-  int posSem = i;
-  string s = to_string(posSem);
 
   // posición inicial de la bandeja i
   char *pos = (bandeja * ie * sizeof(registroentrada)) + dir + sizeof(header);
@@ -70,7 +67,7 @@ registrosalida retirarRegistro(int bandeja, string nombre)
       registro.cantidad = pRegistro->cantidad;
       registro.id = pRegistro->id;
       registro.tipo = pRegistro->tipo;
-      registro.bandeja = pRegistro->tipo;
+      registro.bandeja = pRegistro->bandeja;
       
       //Pongo basura donde estaba
       pRegistro->bandeja = bandeja;

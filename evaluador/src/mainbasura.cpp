@@ -24,7 +24,6 @@ int main()
     crearSemaforo(nombre);
     crearQ(nombre);
     crearHilo(nombre);
-    sleep(1);
     crearHiloProcesadores(nombre);
 
 
@@ -54,7 +53,7 @@ int main()
     cout << "" << endl;
     cout << " Bandejas OE Resultado" << endl;
     cout << "" << endl;
-    recorrerOE(nombre);
+    recorrerQ(nombre);
 
     return 0;
 }

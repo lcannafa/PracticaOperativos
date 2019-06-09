@@ -128,7 +128,6 @@ int ingresarBandejaQ( registrosalida registro, string nombre)
     //accede a la memoria compartida
     // posición inicial
     char *dire = abrirQ(nombre);
-
     headerQ *pHeaderQ = ( headerQ *)dire;
 
     int q = pHeaderQ->q;
