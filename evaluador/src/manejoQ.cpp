@@ -75,16 +75,16 @@ char *abrirQ(string nombre)
         exit(1);
     }
 
-    char *dir;
+    char *dirQ;
 
-    if ((dir = (char *)(mmap(NULL, sizeof(headerQ), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0))) == MAP_FAILED)
+    if ((dirQ = (char *)(mmap(NULL, sizeof(headerQ), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0))) == MAP_FAILED)
     {
         cerr << "Error mapeando la memoria compartida: Q5"
              << errno << strerror(errno) << endl;
         exit(1);
     }
 
-    headerQ *pHeaderQ = (headerQ *)dir;
+    headerQ *pHeaderQ = (headerQ *)dirQ;
     int q = pHeaderQ->q;
     int i = pHeaderQ->i;
     int b = pHeaderQ->b;
@@ -94,13 +94,13 @@ char *abrirQ(string nombre)
     munmap((void *)pHeaderQ, sizeof(headerQ));
     size_t memorysize = sizeof(headerQ) + (sizeof(registrosalida) * q * 3);
 
-    if ((dir = (char *)(mmap(NULL, memorysize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0))) == MAP_FAILED)
+    if ((dirQ = (char *)(mmap(NULL, memorysize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0))) == MAP_FAILED)
     {
         cerr << "Error mapeando la memoria compartida: Q6"
              << errno << strerror(errno) << endl;
         exit(1);
     }
-    return dir;
+    return dirQ;
 }
 
 int recorrerQ(string nombre)
