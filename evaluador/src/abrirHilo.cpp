@@ -11,7 +11,7 @@
 #include <sys/types.h>
 #include "elementos.h"
 #include "AbrirMemoria.cpp"
-#include "retirarElemento.cpp"
+#include "manejoBandejaEntrada.cpp"
 #include "manejoOE.cpp"
 #include "manejoQ.cpp"
 

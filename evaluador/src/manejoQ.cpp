@@ -171,6 +171,7 @@ int ingresarBandejaQ( registrosalida registro, string nombre)
 
     //hasta que no logre insertar intentar
     // Espera la semaforo para insertar, vacio para saber si hay cupo y el mutex
+    //Soy consumidor
     sem_wait(arrayVacio);
     sem_wait(arrayMut);
     // ciclo que avanza dentro de una bandeja usando n, recorre bandeja
@@ -186,6 +187,7 @@ int ingresarBandejaQ( registrosalida registro, string nombre)
             pRegistroSalida->tipo = registro.tipo;
             pRegistroSalida->cantidad = registro.cantidad;
             pRegistroSalida->bandeja = registro.bandeja;
+            //Soy productor
             sem_post(arrayMut);
             sem_post(arrayLleno);
             return EXIT_SUCCESS;
@@ -254,6 +256,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
 
   //hasta que no logre insertar intentar
   // Espera la semaforo para insertar, vacio para saber si hay cupo y el mutex
+  //Soy productor
   sem_wait(arrayLleno);
   sem_wait(arrayMut);
   // ciclo que avanza dentro de una bandeja usando n, recorre bandeja
@@ -281,6 +284,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
       pRegistro->tipo = 'a';
       pRegistro->cantidad = -1;
       pRegistro->bandeja = -1;
+      //Soy consumidor
       sem_post(arrayMut);
       sem_post(arrayVacio);
 

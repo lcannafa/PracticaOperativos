@@ -26,7 +26,7 @@ int crearEspacio(string nombre, int i, int ie, int oe, int q, int b, int d, int 
     exit(1);
   }
 
-  if (ftruncate(fd, sizeof(struct header) != 0))
+  if (ftruncate(fd, sizeof(header) != 0))
   {
     cerr << "Error creando la memoria compartida: 2"
          << errno << strerror(errno) << endl;
@@ -35,14 +35,14 @@ int crearEspacio(string nombre, int i, int ie, int oe, int q, int b, int d, int 
 
   char *dir;
 
-  if ((dir = (char *)mmap(NULL, sizeof(struct header), PROT_READ | PROT_WRITE, MAP_SHARED,
+  if ((dir = (char *)mmap(NULL, sizeof(header), PROT_READ | PROT_WRITE, MAP_SHARED,
                           fd, 0)) == MAP_FAILED)
   {
     cerr << "Error mapeando la memoria compartida: 3"
          << errno << strerror(errno) << endl;
     exit(1);
   }
-  struct header *pHeader = (struct header *)dir;
+  header *pHeader = (header *)dir;
 
   pHeader->i = i;
   pHeader->ie = ie;
