@@ -55,7 +55,7 @@ int main()
     cout << " Bandejas OE Resultado" << endl;
     cout << "" << endl;
     recorrerOE(nombre);
-    //IngresarReactivo(nombre, 100, 'B');
+    IngresarReactivo(nombre, 100, 'B');
     ImprimirReactivo(nombre);
 
     return 0;

@@ -376,15 +376,15 @@ int IngresarReactivo(string nombre, int cantidad, char tipo)
     arrayMut = sem_open(mutex.c_str(), 0);
 
     sem_wait(arrayMut);
-    if (tipo == b)
+    if (tipo == 'B')
     {
         pHeaderQ->b += cantidad;
     }
-    if (tipo == d)
+    if (tipo == 'D')
     {
         pHeaderQ->d += cantidad;
     }
-    if (tipo == s)
+    if (tipo == 'S')
     {
         pHeaderQ->s += cantidad;
     }
