@@ -27,6 +27,7 @@ int main()
     crearHilo(nombre);
     crearHiloProcesadores(nombre);
 
+
     // reg
     registroentrada testD;
     testD.bandeja = 0;
