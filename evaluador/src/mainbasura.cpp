@@ -53,7 +53,7 @@ int main()
     cout << "" << endl;
     cout << " Bandejas OE Resultado" << endl;
     cout << "" << endl;
-    recorrerQ(nombre);
+    recorrerOE(nombre);
 
     return 0;
 }
