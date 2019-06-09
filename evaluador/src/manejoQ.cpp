@@ -358,19 +358,20 @@ int IngresarReactivo(string nombre, int cantidad, char tipo)
     char *dirQ = abrirQ(nombre);
     headerQ *pHeaderQ = (headerQ *)dirQ;
 
-    char b = pHeaderQ->b;
-    char d = pHeaderQ->d;
-    char s = pHeaderQ->s;
+    int b = pHeaderQ->b;
+    int d = pHeaderQ->d;
+    int s = pHeaderQ->s;
+    int i = pHeaderQ->i;
 
     sem_t *arrayMut;
     int pos_tipo;
     int pos_bandejaQ;
     if (tipo == 'B')
-        pos_bandejaQ = 0;
+        pos_tipo = i;
     if (tipo == 'D')
-        pos_bandejaQ = 1;
+        pos_tipo = i+1;
     if (tipo == 'S')
-        pos_bandejaQ = 2;
+        pos_tipo = i+2;
     string mutex = "Mut" + nombre + to_string(pos_tipo);
     arrayMut = sem_open(mutex.c_str(), 0);
 
