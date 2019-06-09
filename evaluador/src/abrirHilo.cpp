@@ -42,9 +42,6 @@ void *procesador(void *bandej)
         ingresarBandejaQ(registro, nom_memoria);
  
     }
-
-    cout << "Sali?" << endl;
-
     pthread_exit(NULL);
 }
 
@@ -53,9 +50,7 @@ void crearHilo(string n)
     //accede a la memoria compartida
     // posición inicial
     char *dir = abrirMemoria(n);
-
-    struct header *pHeader = (struct header *)dir;
-
+    header *pHeader = (header *)dir;
     int i = pHeader->i;
 
     // Instancia los elementos que van a hacer parte de los hilos

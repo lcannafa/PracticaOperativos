@@ -31,8 +31,6 @@ registrosalida retirarRegistro(int bandeja, string nombre)
   //accede a la memoria compartida
   // posición inicial
   char *dir = abrirMemoria(nombre);
-  bool insertado = false;
-
   header *pHeader = (header *)dir;
 
   int i = pHeader->i;

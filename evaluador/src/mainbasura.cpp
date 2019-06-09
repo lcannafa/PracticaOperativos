@@ -20,13 +20,15 @@ int main()
     int s = 5;
 
     cout << "Inicio" << endl;
+
+    // init
     crearEspacio(nombre, i, ie, oe, q, b, d, s);
     crearSemaforo(nombre);
     crearQ(nombre);
     crearHilo(nombre);
     crearHiloProcesadores(nombre);
 
-
+    // reg
     registroentrada testD;
     testD.bandeja = 0;
     testD.cantidad = 5;
@@ -53,6 +55,8 @@ int main()
     cout << "" << endl;
     cout << " Bandejas OE Resultado" << endl;
     cout << "" << endl;
+
+    // list
     recorrerOE(nombre);
 
     return 0;
