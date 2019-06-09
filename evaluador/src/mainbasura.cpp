@@ -2,8 +2,7 @@
 #include "ingresoelemento.cpp"
 #include "AbrirSemaforos.cpp"
 #include "retirarElemento.cpp"
-#include "retiroBandejaQ.cpp"
-#include "BandejasQ.cpp"
+#include "manejoQ.cpp"
 #include "abrirHilo.cpp"
 #include "manejoOE.cpp"
 using namespace std;
@@ -34,7 +33,6 @@ int main()
     testD.cantidad = 5;
     testD.id = 1;
     testD.tipo = 'D';
-
     registroentrada testB;
     testB.bandeja = 1;
     testB.cantidad = 4;

@@ -13,8 +13,7 @@
 #include "AbrirMemoria.cpp"
 #include "retirarElemento.cpp"
 #include "manejoOE.cpp"
-#include "BandejasQ.cpp"
-#include "retiroBandejaQ.cpp"
+#include "manejoQ.cpp"
 
 using namespace std;
 struct banHilo
