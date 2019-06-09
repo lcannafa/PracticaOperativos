@@ -39,7 +39,6 @@ void *procesador(void *bandej)
     {
         registrosalida registro = retirarRegistro(num_bandeja, nom_memoria);
         ingresarBandejaQ(registro, nom_memoria);
- 
     }
     pthread_exit(NULL);
 }
@@ -85,18 +84,17 @@ void crearHilo(string n)
 
 void *procesadorOE(void *bandej)
 {
-
     banPros *producto = (banPros *)bandej;
+    int costo = 1;
     char tipo = producto->tipo;
     string nom_memoria2 = producto->nombre;
 
     for (;;)
-    {   
+    {
+
         registrosalida registro = retirarRegistroDeQ(tipo, nom_memoria2);
         ingresarSalida(registro, nom_memoria2);
     }
-
-    cout << "Sali?" << endl;
 
     pthread_exit(NULL);
 }
@@ -121,8 +119,10 @@ void crearHiloProcesadores(string n)
     // Crea los hilos y les asigna la funcion
     for (int m = 0; m < 3; ++m)
     {
-        if(m == 1) tipoPros = 'D';
-        if(m == 2) tipoPros = 'S';
+        if (m == 1)
+            tipoPros = 'D';
+        if (m == 2)
+            tipoPros = 'S';
         bande.tipo = tipoPros;
         ostringstream namellen;
         namellen << n_Hilo << m;
@@ -130,7 +130,6 @@ void crearHiloProcesadores(string n)
         pthread_create(&hiloQ[m], NULL, procesadorOE, (void *)&bande);
         sleep(1);
     }
-
 
     //ESTO SE BORRA, SE DEJA AHORA POR DEBUGGER
 

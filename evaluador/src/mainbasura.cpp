@@ -10,13 +10,13 @@ using namespace std;
 int main()
 {
     string nombre = "evaluator";
-    int i = 3;
-    int ie = 5;
+    int i = 5;
+    int ie = 6;
     int oe = 10;
-    int q = 5;
-    int b = 5;
-    int d = 5;
-    int s = 5;
+    int q = 6;
+    int b = 100;
+    int d = 100;
+    int s = 100;
 
     cout << "Inicio" << endl;
 
@@ -31,18 +31,18 @@ int main()
     // reg
     registroentrada testD;
     testD.bandeja = 0;
-    testD.cantidad = 5;
+    testD.cantidad = 1;
     testD.id = 1;
     testD.tipo = 'D';
     registroentrada testB;
     testB.bandeja = 1;
-    testB.cantidad = 4;
+    testB.cantidad = 3;
     testB.id = 2;
     testB.tipo = 'B';
 
     registroentrada testS;
     testS.bandeja = 2;
-    testS.cantidad = 8;
+    testS.cantidad = 2;
     testS.id = 3;
     testS.tipo = 'S';
 
@@ -54,6 +54,7 @@ int main()
     cout << "" << endl;
     cout << " Bandejas OE Resultado" << endl;
     cout << "" << endl;
+    ImprimirReactivo(nombre);
 
     // list
     recorrerOE(nombre);

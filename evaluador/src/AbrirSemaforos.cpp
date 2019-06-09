@@ -35,17 +35,17 @@ int crearSemaforo(string nombre)
     {
         if (j == 0)
         {
-            cantidadReact = b;
+            cantidadReact = 0;
         }
 
         else if (j == 1)
         {
-            cantidadReact = d;
+            cantidadReact = 0;
         }
 
         else if (j == 2)
         {
-            cantidadReact = s;
+            cantidadReact = 0;
         }
 
         else if (j >= i)

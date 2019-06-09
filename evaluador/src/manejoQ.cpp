@@ -7,7 +7,6 @@
 #include <cstdlib>
 #include <sstream>
 #include <stdio.h>
-#include <cerrno>
 #include <cstring>
 #include <unistd.h>
 #include "elementos.h"
@@ -20,9 +19,12 @@ int crearQ(string nombre)
     //accede a la memoria compartida
     // posición inicial
     char *dir = abrirMemoria(nombre);
-     header *pHeader = ( header *)dir;
+    header *pHeader = (header *)dir;
     int q = pHeader->q;
     int i = pHeader->i;
+    int b = pHeader->b;
+    int d = pHeader->d;
+    int s = pHeader->s;
 
     // Abrir espacio de memoria para usar, usando el nombre n
     nombre = nombre + "Q";
@@ -35,7 +37,7 @@ int crearQ(string nombre)
         exit(1);
     }
     //Acorta la region de memoria, de acuerdo al tamaño requerido
-    if (ftruncate(fd, sizeof(headerQ) != 0)) 
+    if (ftruncate(fd, sizeof(headerQ) != 0))
     {
         cerr << "Error creando la memoria compartida: Q2"
              << errno << strerror(errno) << endl;
@@ -53,6 +55,9 @@ int crearQ(string nombre)
     headerQ *pHeaderQ = (headerQ *)dirQ;
     pHeaderQ->q = q;
     pHeaderQ->i = i;
+    pHeaderQ->b = b;
+    pHeaderQ->d = d;
+    pHeaderQ->s = s;
 
     close(fd);
     return EXIT_SUCCESS;
@@ -82,6 +87,9 @@ char *abrirQ(string nombre)
     headerQ *pHeaderQ = (headerQ *)dir;
     int q = pHeaderQ->q;
     int i = pHeaderQ->i;
+    int b = pHeaderQ->b;
+    int d = pHeaderQ->d;
+    int s = pHeaderQ->s;
 
     munmap((void *)pHeaderQ, sizeof(headerQ));
     size_t memorysize = sizeof(headerQ) + (sizeof(registrosalida) * q * 3);
@@ -106,10 +114,13 @@ int recorrerQ(string nombre)
     char *dire = abrirQ(nombre);
     headerQ *pHeaderQ = (headerQ *)dire;
     int q = pHeaderQ->q;
+    int b = pHeaderQ->b;
+    int d = pHeaderQ->d;
+    int s = pHeaderQ->s;
 
     while (recorrido < 3)
     {
-        char *pos = dire + sizeof( headerQ) + (recorrido * sizeof(registrosalida) * q);
+        char *pos = dire + sizeof(headerQ) + (recorrido * sizeof(registrosalida) * q);
 
         while (temp2 < q)
         {
@@ -125,15 +136,18 @@ int recorrerQ(string nombre)
     return 0;
 }
 
-int ingresarBandejaQ( registrosalida registro, string nombre)
+int ingresarBandejaQ(registrosalida registro, string nombre)
 {
     //accede a la memoria compartida
     // posición inicial
     char *dire = abrirQ(nombre);
-    headerQ *pHeaderQ = ( headerQ *)dire;
+    headerQ *pHeaderQ = (headerQ *)dire;
 
     int q = pHeaderQ->q;
     int i = pHeaderQ->i;
+    int b = pHeaderQ->b;
+    int d = pHeaderQ->d;
+    int s = pHeaderQ->s;
 
     //Llama los 3 semaforo requeridos, mutex, vacio lleno para el productor consumidor
     sem_t *arrayMut, *arrayVacio, *arrayLleno;
@@ -157,13 +171,8 @@ int ingresarBandejaQ( registrosalida registro, string nombre)
     arrayVacio = sem_open(vacio.c_str(), 0);
     arrayLleno = sem_open(lleno.c_str(), 0);
 
-
-
     // variable para recorrer la bandeja
     int recorrido = 0;
-    //Semaforos
-    int posSem = q;
-    string s = to_string(posSem);
 
     // posición inicial de la bandeja según el tipo
     int posBandeja = tipopipo - i;
@@ -206,95 +215,190 @@ int ingresarBandejaQ( registrosalida registro, string nombre)
 
 registrosalida retirarRegistroDeQ(char tipo, string nombre)
 {
-  //accede a la memoria compartida
-  // posición inicial
-  char *dirQ = abrirQ(nombre);
-  headerQ *pHeader = (headerQ *)dirQ;
+    //accede a la memoria compartida
+    // posición inicial
+    char *dirQ = abrirQ(nombre);
+    headerQ *pHeaderQ = (headerQ *)dirQ;
 
-  int q = pHeader->q;
-  int i = pHeader->i;
+    int q = pHeaderQ->q;
+    int i = pHeaderQ->i;
+    int b = pHeaderQ->b;
+    int d = pHeaderQ->d;
+    int s = pHeaderQ->s;
 
-  //Llama los 3 semaforo requeridos, mutex, vacio lleno para el productor consumidor de las bandejas
-  sem_t *arrayMut, *arrayVacio, *arrayLleno, *arrayReact;
-  int pos_tipo;
-  int pos_bandejaQ;
-  if (tipo == 'B')
-  {
-    pos_tipo = i;
-    pos_bandejaQ = 0;
+    //Llama los 3 semaforo requeridos, mutex, vacio lleno para el productor consumidor de las bandejas
+    sem_t *arrayMut, *arrayVacio, *arrayLleno, *arrayReact;
+    int pos_tipo;
+    int pos_bandejaQ;
+    if (tipo == 'B')
+    {
+        pos_tipo = i;
+        pos_bandejaQ = 0;
+    }
+    if (tipo == 'D')
+    {
+        pos_tipo = i + 1;
+        pos_bandejaQ = 1;
+    }
+    if (tipo == 'S')
+    {
+        pos_tipo = i + 2;
+        pos_bandejaQ = 2;
+    }
 
-  }
-  if (tipo == 'D')
-  {
-    pos_tipo = i + 1;
-    pos_bandejaQ = 1;
-  }
-  if (tipo == 'S')
-  {
-    pos_tipo = i + 2;
-    pos_bandejaQ = 2;
-  }
+    string mutex = "Mut" + nombre + to_string(pos_tipo);
+    string vacio = "Vacio" + nombre + to_string(pos_tipo);
+    string lleno = "Lleno" + nombre + to_string(pos_tipo);
+    string reactivo = "Reactivo" + nombre + to_string(pos_bandejaQ);
 
-  string mutex = "Mut" + nombre + to_string(pos_tipo);
-  string vacio = "Vacio" + nombre + to_string(pos_tipo);
-  string lleno = "Lleno" + nombre + to_string(pos_tipo);
-  string reactivo = "Reactivo" + nombre + to_string(pos_bandejaQ);
+    arrayMut = sem_open(mutex.c_str(), 0);
+    arrayVacio = sem_open(vacio.c_str(), 0);
+    arrayLleno = sem_open(lleno.c_str(), 0);
+    arrayReact = sem_open(reactivo.c_str(), 0);
 
-  arrayMut = sem_open(mutex.c_str(), 0);
-  arrayVacio = sem_open(vacio.c_str(), 0);
-  arrayLleno = sem_open(lleno.c_str(), 0);
-  arrayReact = sem_open(reactivo.c_str(), 0);
+    // variable para recorrer la bandeja
+    int recorrido = 0;
 
-  // variable para recorrer la bandeja
-  int recorrido = 0;
+    // posición inicial de la bandeja B|D|S
+    char *pos = dirQ + sizeof(headerQ) + (pos_bandejaQ * q * sizeof(registrosalida));
 
-  // posición inicial de la bandeja B|D|S
-  char *pos = dirQ + sizeof(headerQ) + (pos_bandejaQ * q * sizeof(registrosalida));
+    //Crear el registro de salida que d
+    registrosalida registro;
 
-  //Crear el registro de salida que d
-  registrosalida registro;
+    //hasta que no logre insertar intentar
+    // Espera la semaforo para insertar, vacio para saber si hay cupo y el mutex
+    //Soy productor
 
-  //hasta que no logre insertar intentar
-  // Espera la semaforo para insertar, vacio para saber si hay cupo y el mutex
-  //Soy productor
-  sem_wait(arrayLleno);
-  sem_wait(arrayMut);
-  // ciclo que avanza dentro de una bandeja usando n, recorre bandeja
-  while (recorrido < q)
-  {
-
-    //posición en la bandeja
-    char *posn = (pos + (recorrido * sizeof(registrosalida)));
-    registrosalida *pRegistro = (registrosalida *)posn;
-    
-
-    //si encuentro elemento a retirar
-    if (pRegistro->cantidad > 0)
+    sem_wait(arrayLleno);
+    sem_wait(arrayMut);
+    // ciclo que avanza dentro de una bandeja usando n, recorre bandeja
+    while (recorrido < q)
     {
 
-      //asigno los valores a devolver
-      registro.cantidad = pRegistro->cantidad;
-      registro.id = pRegistro->id;
-      registro.tipo = pRegistro->tipo;
-      registro.bandeja = pRegistro->bandeja;
+        //posición en la bandeja
+        char *posn = (pos + (recorrido * sizeof(registrosalida)));
+        registrosalida *pRegistro = (registrosalida *)posn;
 
-      //Pongo basura donde estaba
-      //pRegistro->bandeja = bandeja;
-      pRegistro->id = -1;
-      pRegistro->tipo = 'a';
-      pRegistro->cantidad = -1;
-      pRegistro->bandeja = -1;
-      //Soy consumidor
-      sem_post(arrayMut);
-      sem_post(arrayVacio);
+        //si encuentro elemento a retirar
+        if (pRegistro->cantidad > 0)
+        {
 
-      return registro;
+            //GENERACION del costo en reativo según tipo
+            int costo;
+            char tipodelregistro = pRegistro->tipo;
+            for (int f = 0; f < pRegistro->cantidad; ++f)
+            {
+                if (tipodelregistro == 'B')
+                    costo += rand() % ((7 + 1) - 1);
+                if (tipodelregistro == 'D')
+                    costo += 5 + rand() % ((20 + 1) - 5);
+                if (tipodelregistro == 'S')
+                    costo += 8 + rand() % ((25 + 1) - 8);
+            }
+            // Si es tipo B, Si no tengo suficiente reactivo libero el mutex y lo espero de nuevo
+            if (tipodelregistro == 'B')
+            {
+                while (pHeaderQ->b < costo)
+                {
+                    sem_post(arrayMut);
+                    sem_wait(arrayMut);
+                }
+                pHeaderQ->b -= costo;
+            }
+            // Si es tipo D, Si no tengo suficiente reactivo libero el mutex y lo espero de nuevo
+            if (tipodelregistro == 'D')
+            {
+                while (pHeaderQ->d < costo)
+                {
+                    sem_post(arrayMut);
+                    sem_wait(arrayMut);
+                }
+                pHeaderQ->d -= costo;
+            }
+            // Si es tipo S, Si no tengo suficiente reactivo libero el mutex y lo espero de nuevo
+            if (tipodelregistro == 'S')
+            {
+                while (pHeaderQ->s < costo)
+                {
+                    sem_post(arrayMut);
+                    sem_wait(arrayMut);
+                }
+                pHeaderQ->s -= costo;
+            }
+
+            //asigno los valores a devolver
+            registro.cantidad = pRegistro->cantidad;
+            registro.id = pRegistro->id;
+            registro.tipo = pRegistro->tipo;
+            registro.bandeja = pRegistro->bandeja;
+
+            //Pongo basura donde estaba
+            pRegistro->id = 0;
+            pRegistro->tipo = '0';
+            pRegistro->cantidad = 0;
+            pRegistro->bandeja = 0;
+            //Soy consumidor
+            sem_post(arrayMut);
+            sem_post(arrayVacio);
+
+            return registro;
+        }
+        else
+        {
+            recorrido++;
+        }
     }
-    else
+    return registro;
+}
+
+int IngresarReactivo(string nombre, int cantidad, char tipo)
+{
+    //accede a la memoria compartida
+    // posición inicial
+    char *dirQ = abrirQ(nombre);
+    headerQ *pHeaderQ = (headerQ *)dirQ;
+
+    char b = pHeaderQ->b;
+    char d = pHeaderQ->d;
+    char s = pHeaderQ->s;
+
+    sem_t *arrayMut;
+    int pos_tipo;
+    int pos_bandejaQ;
+    if (tipo == 'B')
+        pos_bandejaQ = 0;
+    if (tipo == 'D')
+        pos_bandejaQ = 1;
+    if (tipo == 'S')
+        pos_bandejaQ = 2;
+    string mutex = "Mut" + nombre + to_string(pos_tipo);
+    arrayMut = sem_open(mutex.c_str(), 0);
+
+    sem_wait(arrayMut);
+    if (tipo == b)
     {
-      recorrido++;
+        pHeaderQ->b += cantidad;
     }
-    
-  }
-  return registro;
+    if (tipo == d)
+    {
+        pHeaderQ->d += cantidad;
+    }
+    if (tipo == s)
+    {
+        pHeaderQ->s += cantidad;
+    }
+    sem_post(arrayMut);
+
+    return 0;
+}
+
+int ImprimirReactivo(string nombre)
+{
+    char *dirQ = abrirQ(nombre);
+    headerQ *pHeaderQ = (headerQ *)dirQ;
+
+    cout << "Tenemos " << pHeaderQ->b << " de reactivo B" << endl;
+    cout << "Tenemos " << pHeaderQ->d << " de reactivo D" << endl;
+    cout << "Tenemos " << pHeaderQ->s << " de reactivo S" << endl;
+    return 0;
 }
