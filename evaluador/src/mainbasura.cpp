@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
         string n = "evaluator";
         vector<string> argumentos{"-i", "-ie", "-oe", "-n", "-d", "-b", "-s", "-q"};
 
-        // Se lee cada uno de los argumentos que vienen con el Init
+        // Se lee cada uno de los argumentos del Init
         for (int x = 2; x < argc; ++x)
         {
 
@@ -149,13 +149,21 @@ int main(int argc, char *argv[])
             }
         }
 
-        // Se crea un objeto Init, donde se asignara la memoria.
+        /* Se crea un objeto Init, donde se asignara la memoria.
+        Lanza el espacio de memoria, crea los semaforos, crea las bandeja e hilos
+         en resumen hace init */
         crearEspacio(n, i, ie, oe, q, b, d, s);
         crearSemaforo(n);
         crearQ(n);
         crearHilo(n);
         crearHiloProcesadores(n);
 
+        cout << "El espacio de memoria y sus componentes están listos:"<< endl;
+        
+        cout << "Usar en otra consola :" << endl;
+        cout << "./bin/main reg -n evaluator -"<< endl;
+        cout << "o tambien para ingresar de manera manual" << endl;
+        cout << "./bin/main ctrl -n evaluator"<< endl;
         while (true)
         {
         }
