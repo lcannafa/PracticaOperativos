@@ -8,13 +8,13 @@ Para compilar se debe ir a ./evaluador/ y ejecutamos el comando make, se espera 
 el ejecutable quedara en la carpeta build
 Para la ejecucion se pueden usar los siguientes comandos:
 
-./build/mainbasura init -i[integer] -ie [integer] -oe[integer] -n[string] -b[integer] -d[integer] -s[integer] -q[integer]
+./build/mainbasura init -i [integer] -ie [integer] -oe[integer] -n[string] -b[integer] -d[integer] -s[integer] -q[integer]
 
-./build/mainbasura reg -n[string] donde se pueden ingresar los elementos manualmente o 
+./build/mainbasura reg -n [string] donde se pueden ingresar los elementos manualmente o 
 
-./build/mainbasura reg -n[string]{{filename1}...|}
+./build/mainbasura reg -n [string]{{filename1}...|}
 
-./build/mainbasura ctrl -n[string] esto abrira una linea ejecutable en consola en la cual se podran ejecutar los siguientes sub comandos:
+./build/mainbasura ctrl -n [string] esto abrira una linea ejecutable en consola en la cual se podran ejecutar los siguientes sub comandos:
 
 >list processing | waiting | reported | reactive | all  NL
 
