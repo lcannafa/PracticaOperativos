@@ -175,8 +175,8 @@ int main(int argc, char *argv[])
     else if (!strcmp(argv[1], "reg"))
     {
 
-        // Crea un objeto reg, y crea una var listen para el ciclo donde escucha al usuario.
-        // Si la flag -n es correcta, asigna la memoria a la varible memory_name
+        // Crea un objeto registro, y crea una var listen para el ciclo donde escucha al usuario.
+        // Si la flag -n es correcta, se utiliza para entregar el nombre del espacio de memoria a la funcion
         // En caso contrario, cierra el programa.
         registroentrada registro;
         int id;
@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
             {
                 cout << ">";
                 getline(cin, user_input);
-                cout << "El usuario ingreso: ";
+                cout << "input: ";
                 cout << user_input << endl;
 
                 if (user_input == "exit")
@@ -223,14 +223,16 @@ int main(int argc, char *argv[])
                 registro.tipo = parsed_user_input[1][0];
                 registro.cantidad = stoi(parsed_user_input[2]);
 
+                // intenta asignar una id unica
                 while (ciclar)
                 {
                     id = rand() % ((10000 + 1) - 1);
+
                     repetido = find(begin(id_existentes), end(id_existentes), id) != end(id_existentes);
 
                     if (!repetido)
                     {
-                        cout << "Es unico" << endl;
+                        cout << "id unica acoplada" << endl;
                         id_existentes.insert(begin(id_existentes), id);
                         ciclar = false;
                     }
@@ -254,7 +256,7 @@ int main(int argc, char *argv[])
             }
             else
             {
-                cout << "El archivo se abrio con exito" << endl;
+                cout << "se abrio el archivo con exito" << endl;
             }
 
             // Forma estandar de recibir lineas de texto de un fichero.
@@ -277,7 +279,7 @@ int main(int argc, char *argv[])
 
                     if (!repetido)
                     {
-                        cout << "Es unico" << endl;
+                        cout << "id unica acoplada" << endl;
                         id_existentes.insert(begin(id_existentes), id);
                         ciclar = false;
                     }
