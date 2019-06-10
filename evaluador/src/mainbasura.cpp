@@ -161,9 +161,11 @@ int main(int argc, char *argv[])
         cout << "El espacio de memoria y sus componentes están listos:"<< endl;
         
         cout << "Usar en otra consola :" << endl;
-        cout << "./bin/main reg -n evaluator -"<< endl;
-        cout << "o tambien para ingresar de manera manual" << endl;
-        cout << "./bin/main ctrl -n evaluator"<< endl;
+        cout << "./build/mainbasura ctrl -n "<< n << endl;
+        cout << "o tambien para ingresar de manera manual los registros" << endl;
+        cout << "./build/mainbasura reg -n " << n << " -"<< endl;
+        cout << "para cerrar la memoria compartida y sus semaforos" << endl;
+        cout << "./build/mainbasura stop -n " << n << endl;
         while (true)
         {
         }
