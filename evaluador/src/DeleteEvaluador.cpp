@@ -11,9 +11,8 @@
 #include "AbrirSemaforos.cpp"
 using namespace std;
 
-int main(void)
+int detener(string nombre)
 {
-  string nombre = "evaluator";
   char *dir = abrirMemoria(nombre);
   struct header *pHeader = (struct header *)dir;
 

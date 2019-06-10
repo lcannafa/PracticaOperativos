@@ -28,24 +28,24 @@ int crearSemaforo(string nombre)
     string llen = "Lleno" + nombre;
     string vac = "Vacio" + nombre;
     string reactivo = "Reactivo" + nombre;
-    int cantidadReact = 1;
+    int cantidadReact = 0;
     int espacios = ie;
 
     for (int j = 0; j < totalsems; j++)
     {
         if (j == 0)
         {
-            cantidadReact = 1;
+            cantidadReact = 0;
         }
 
         else if (j == 1)
         {
-            cantidadReact = 1;
+            cantidadReact = 0;
         }
 
         else if (j == 2)
         {
-            cantidadReact = 1;
+            cantidadReact = 0;
         }
 
         else if (j >= i)

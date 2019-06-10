@@ -69,14 +69,6 @@ void crearHilo(string n)
         sleep(0.1);
     }
 
-    //ESTO SE BORRA, SE DEJA AHORA POR DEBUGGER
-
-    // if (pthread_join(hiloP[0], NULL))
-    // {
-    //     fprintf(stderr, "Error joining thread\n");
-    //     return;
-    // }
-
     return;
 }
 
@@ -88,12 +80,22 @@ void *procesadorOE(void *bandej)
     int costo = 1;
     char tipo = producto->tipo;
     string nom_memoria2 = producto->nombre;
-
+    int value;
     for (;;)
     {
-
         registrosalida registro = retirarRegistroDeQ(tipo, nom_memoria2);
+        value = rand()%((50+1)-1);
         ingresarSalida(registro, nom_memoria2);
+        if(0 < value && value < 16){
+            registro.resultado = '-';
+        }
+        else if(15 < value && value < 36){
+            registro.resultado = 'N';
+        }
+        else if(35 < value && value < 51){
+            registro.resultado = 'P';
+        }
+        sleep(4);
     }
 
     pthread_exit(NULL);
@@ -130,14 +132,6 @@ void crearHiloProcesadores(string n)
         pthread_create(&hiloQ[m], NULL, procesadorOE, (void *)&bande);
         sleep(1);
     }
-
-    //ESTO SE BORRA, SE DEJA AHORA POR DEBUGGER
-
-    // if (pthread_join(hiloP[0], NULL))
-    // {
-    //     fprintf(stderr, "Error joining thread\n");
-    //     return;
-    // }
 
     return;
 }

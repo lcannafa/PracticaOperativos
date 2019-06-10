@@ -49,7 +49,7 @@ int ingresarRegistro(registroentrada registro, string nombre)
   char *pos = (registro.bandeja * ie * sizeof(registroentrada)) + dir + sizeof(header);
 
   //hasta que no logre insertar intentar
-  // Espera la semaforo para insertar, vacio para saber si hay cupo y el mutex
+  //Espera la semaforo para insertar, vacio para saber si hay cupo y el mutex
   //Soy consumidor
   sem_wait(arrayVacio);
   sem_wait(arrayMut);
@@ -69,6 +69,7 @@ int ingresarRegistro(registroentrada registro, string nombre)
       pRegistro->tipo = registro.tipo;
       pRegistro->cantidad = registro.cantidad;
       pHeader->contador = pHeader->contador + 1;
+      pRegistro->time = rand() % ((10+1)-1);
       //Soy productor
       sem_post(arrayMut);
       sem_post(arrayLleno);
@@ -107,7 +108,9 @@ int recorrer(string nombre)
     {
       char *posn = (pos + (temp2 * sizeof(registroentrada)));
       registroentrada *pRegistro = (registroentrada *)posn;
-      cout << pRegistro->id << pRegistro->tipo << pRegistro->cantidad << endl;
+      if(pRegistro->cantidad > 0){
+        cout << "[" << pRegistro->id << " " << pRegistro->bandeja << " " << pRegistro->tipo << " " << pRegistro->cantidad << "]" << endl;
+      }
       temp2++;
     }
     temp1++;
@@ -171,6 +174,7 @@ registrosalida retirarRegistro(int bandeja, string nombre)
       registro.id = pRegistro->id;
       registro.tipo = pRegistro->tipo;
       registro.bandeja = pRegistro->bandeja;
+      registro.time = pRegistro->time;
       
       //Pongo basura donde estaba
       pRegistro->bandeja = bandeja;
@@ -193,14 +197,14 @@ registrosalida retirarRegistro(int bandeja, string nombre)
   return registro;
 }
 
-int RetornarContador(string nombre){
+int retornarContador(string nombre){
 
   //accede a la memoria compartida
   // posición inicial
   char *dir = abrirMemoria(nombre);
   header *pHeader = (header *)dir;
   int contador = pHeader->contador;
-  cout << "Se ha ingesado un total de : " << pHeader->contador << " registros" << endl;
+  //cout << "Se ha ingesado un total de : " << pHeader->contador << " registros" << endl;
   return 0;
 
 }

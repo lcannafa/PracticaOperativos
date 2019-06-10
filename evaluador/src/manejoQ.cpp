@@ -126,7 +126,8 @@ int recorrerQ(string nombre)
         {
             char *posn = pos + (temp2 * sizeof(registrosalida));
             registrosalida *pRegistroSalida = (registrosalida *)posn;
-            cout << pRegistroSalida->id << pRegistroSalida->tipo << pRegistroSalida->cantidad << endl;
+            if(pRegistroSalida->cantidad > 0)
+            cout << "[" << pRegistroSalida->id << " "<<pRegistroSalida->bandeja<< " "<< pRegistroSalida->tipo << " "<< pRegistroSalida->cantidad<< " "<< pRegistroSalida->time <<"]" << endl;
             temp2++;
         }
 
@@ -196,10 +197,11 @@ int ingresarBandejaQ(registrosalida registro, string nombre)
             pRegistroSalida->tipo = registro.tipo;
             pRegistroSalida->cantidad = registro.cantidad;
             pRegistroSalida->bandeja = registro.bandeja;
+            pRegistroSalida->time = registro.time;
             //Soy productor
             sem_post(arrayMut);
             sem_post(arrayLleno);
-            return EXIT_SUCCESS;
+            return 0;
         }
         // sino sigue avanzando
         else

@@ -29,6 +29,7 @@ struct registroentrada {
   int id;
   char tipo;
   int cantidad;
+  int time;
 };
 
 // externo -> nombrado
@@ -39,4 +40,7 @@ struct registrosalida{
   int bandeja;
   char tipo;
   int cantidad;
+  int time;
+  char resultado;
+
 };
