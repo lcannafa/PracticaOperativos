@@ -84,15 +84,18 @@ void *procesadorOE(void *bandej)
     for (;;)
     {
         registrosalida registro = retirarRegistroDeQ(tipo, nom_memoria2);
-        value = rand()%((50+1)-1);
+        value = rand() % ((50 + 1) - 1);
         ingresarSalida(registro, nom_memoria2);
-        if(0 < value && value < 16){
+        if (0 < value && value < 16)
+        {
             registro.resultado = '-';
         }
-        else if(15 < value && value < 36){
+        else if (15 < value && value < 36)
+        {
             registro.resultado = 'N';
         }
-        else if(35 < value && value < 51){
+        else if (35 < value && value < 51)
+        {
             registro.resultado = 'P';
         }
         sleep(4);

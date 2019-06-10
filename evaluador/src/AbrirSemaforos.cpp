@@ -10,13 +10,13 @@ int crearSemaforo(string nombre)
     char *dir = abrirMemoria(nombre);
     struct header *pHeader = (struct header *)dir;
 
-    int i  = pHeader->i;
+    int i = pHeader->i;
     int ie = pHeader->ie;
     int oe = pHeader->oe;
-    int q  = pHeader->q;
-    int b  = pHeader->b;
-    int d  = pHeader->d;
-    int s  = pHeader->s;
+    int q = pHeader->q;
+    int b = pHeader->b;
+    int d = pHeader->d;
+    int s = pHeader->s;
 
     int totalsems = 4 + i;
     sem_t **arraySemMut = new sem_t *[totalsems];

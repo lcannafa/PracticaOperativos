@@ -42,9 +42,9 @@ char *abrirMemoria(string nombre)
     int contador = pHeader->contador;
 
     munmap((void *)pHeader, sizeof(header));
-    size_t memorysize =  sizeof(header) + //Tamaño del header 
+    size_t memorysize = sizeof(header) +                     //Tamaño del header
                         (sizeof(registroentrada) * i * ie) + //Tamaño de la bandeja de entrada
-                        (sizeof(registrosalida) * oe); //Tamaño de la bandeja de salida
+                        (sizeof(registrosalida) * oe);       //Tamaño de la bandeja de salida
 
     if ((dir = (char *)(mmap(NULL, memorysize, PROT_READ | PROT_WRITE, MAP_SHARED,
                              fd, 0))) == MAP_FAILED)
