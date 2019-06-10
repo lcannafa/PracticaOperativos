@@ -11,6 +11,7 @@ struct header{
   int d;
   int s;
   char n[30];
+  int contador;
 };
 
 //

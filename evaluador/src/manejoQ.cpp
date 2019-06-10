@@ -266,7 +266,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
     registrosalida registro;
 
     //hasta que no logre insertar intentar
-    // Espera la semaforo para insertar, vacio para saber si hay cupo y el mutex
+    // Espera la semaforo paraint b = pHeader->b; insertar, vacio para saber si hay cupo y el mutex
     //Soy productor
 
     sem_wait(arrayLleno);
@@ -295,33 +295,33 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
                 if (tipodelregistro == 'S')
                     costo += 8 + rand() % ((25 + 1) - 8);
             }
+
+
+
             // Si es tipo B, Si no tengo suficiente reactivo libero el mutex y lo espero de nuevo
             if (tipodelregistro == 'B')
             {
                 while (pHeaderQ->b < costo)
                 {
-                    sem_post(arrayMut);
-                    sem_wait(arrayMut);
+                sem_wait(arrayReact);
                 }
                 pHeaderQ->b -= costo;
             }
             // Si es tipo D, Si no tengo suficiente reactivo libero el mutex y lo espero de nuevo
-            if (tipodelregistro == 'D')
+            else if (tipodelregistro == 'D')
             {
                 while (pHeaderQ->d < costo)
                 {
-                    sem_post(arrayMut);
-                    sem_wait(arrayMut);
+                sem_wait(arrayReact);
                 }
                 pHeaderQ->d -= costo;
             }
             // Si es tipo S, Si no tengo suficiente reactivo libero el mutex y lo espero de nuevo
-            if (tipodelregistro == 'S')
+            else if (tipodelregistro == 'S')
             {
                 while (pHeaderQ->s < costo)
                 {
-                    sem_post(arrayMut);
-                    sem_wait(arrayMut);
+                sem_wait(arrayReact);
                 }
                 pHeaderQ->s -= costo;
             }
@@ -363,19 +363,19 @@ int IngresarReactivo(string nombre, int cantidad, char tipo)
     int s = pHeaderQ->s;
     int i = pHeaderQ->i;
 
-    sem_t *arrayMut;
-    int pos_tipo;
-    int pos_bandejaQ;
-    if (tipo == 'B')
-        pos_tipo = i;
-    if (tipo == 'D')
-        pos_tipo = i+1;
-    if (tipo == 'S')
-        pos_tipo = i+2;
-    string mutex = "Mut" + nombre + to_string(pos_tipo);
-    arrayMut = sem_open(mutex.c_str(), 0);
 
-    sem_wait(arrayMut);
+    sem_t *arrayReact;
+    int pos_tipo;
+
+    if (tipo == 'B')
+        pos_tipo = 0;
+    if (tipo == 'D')
+        pos_tipo = 1;
+    if (tipo == 'S')
+        pos_tipo = 2;
+    string reactivo = "Reactivo" + nombre + to_string(pos_tipo);
+    arrayReact = sem_open(reactivo.c_str(), 0);
+
     if (tipo == 'B')
     {
         pHeaderQ->b += cantidad;
@@ -388,7 +388,7 @@ int IngresarReactivo(string nombre, int cantidad, char tipo)
     {
         pHeaderQ->s += cantidad;
     }
-    sem_post(arrayMut);
+    sem_post(arrayReact);
 
     return 0;
 }

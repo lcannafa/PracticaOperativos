@@ -39,11 +39,12 @@ char *abrirMemoria(string nombre)
     int ie = pHeader->ie;
     int oe = pHeader->oe;
     int q = pHeader->q;
+    int contador = pHeader->contador;
 
-    munmap((void *)pHeader, sizeof(struct header));
-    size_t memorysize =  sizeof(struct header) + //Tamaño del header 
-                        (sizeof(struct registroentrada) * i * ie) + //Tamaño de la bandeja de entrada
-                        (sizeof(struct registrosalida) * oe); //Tamaño de la bandeja de salida
+    munmap((void *)pHeader, sizeof(header));
+    size_t memorysize =  sizeof(header) + //Tamaño del header 
+                        (sizeof(registroentrada) * i * ie) + //Tamaño de la bandeja de entrada
+                        (sizeof(registrosalida) * oe); //Tamaño de la bandeja de salida
 
     if ((dir = (char *)(mmap(NULL, memorysize, PROT_READ | PROT_WRITE, MAP_SHARED,
                              fd, 0))) == MAP_FAILED)

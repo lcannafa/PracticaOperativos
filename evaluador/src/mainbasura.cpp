@@ -33,12 +33,12 @@ int main()
     testD.bandeja = 0;
     testD.cantidad = 1;
     testD.id = 1;
-    testD.tipo = 'S';
+    testD.tipo = 'B';
     registroentrada testB;
     testB.bandeja = 1;
-    testB.cantidad = 10;
+    testB.cantidad = 4;
     testB.id = 2;
-    testB.tipo = 'S';
+    testB.tipo = 'D';
 
     registroentrada testS;
     testS.bandeja = 2;
@@ -48,27 +48,22 @@ int main()
 
     ImprimirReactivo(nombre);
 
-    //ingresarRegistro(testD, nombre);
+    ingresarRegistro(testD, nombre);
     ingresarRegistro(testB, nombre);
-    //ingresarRegistro(testS, nombre);
+    ingresarRegistro(testS, nombre);
+    ingresarRegistro(testD, nombre);
+    
  
-    IngresarReactivo(nombre, 100, 'S');
-    ImprimirReactivo(nombre);
      cout <<endl;
-     
-    ingresarRegistro(testB, nombre);
-    ImprimirReactivo(nombre);
      cout <<endl;
-    ingresarRegistro(testB, nombre);
-    ImprimirReactivo(nombre);
     
     sleep(5);
     cout << "" << endl;
     cout << " Bandejas OE Resultado" << endl;
     cout << "" << endl;
     recorrerOE(nombre);
-    //IngresarReactivo(nombre, 100, 'B');
     ImprimirReactivo(nombre);
+    RetornarContador(nombre);
 
     return 0;
 }

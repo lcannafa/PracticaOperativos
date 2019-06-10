@@ -38,12 +38,12 @@ int ingresarRegistro(registroentrada registro, string nombre)
   int i  = pHeader->i;
   int ie = pHeader->ie;
   int oe = pHeader->oe;
+  int contador = pHeader->contador;
+
 
   // variable para recorrer la bandeja
   int recorrido = 0;
-  //Semaforos
-  int posSem = i;
-  string s = to_string(posSem);
+
 
   // posición inicial de la bandeja i
   char *pos = (registro.bandeja * ie * sizeof(registroentrada)) + dir + sizeof(header);
@@ -68,12 +68,12 @@ int ingresarRegistro(registroentrada registro, string nombre)
       pRegistro->id = registro.id;
       pRegistro->tipo = registro.tipo;
       pRegistro->cantidad = registro.cantidad;
+      pHeader->contador = pHeader->contador + 1;
       //Soy productor
       sem_post(arrayMut);
       sem_post(arrayLleno);
       return EXIT_SUCCESS;
-      return 0;
-    }
+          }
     // sino sigue avanzando
     else
     {
@@ -98,6 +98,7 @@ int recorrer(string nombre)
   int i = pHeader->i;
   int ie = pHeader->ie;
   int oe = pHeader->oe;
+  int contador = pHeader->contador;
 
   while (temp1 < i)
   {
@@ -137,6 +138,7 @@ registrosalida retirarRegistro(int bandeja, string nombre)
   int i = pHeader->i;
   int ie = pHeader->ie;
   int oe = pHeader->oe;
+  int contador = pHeader->contador;
 
   // variable para recorrer la bandeja
   int recorrido = 0;
@@ -189,5 +191,17 @@ registrosalida retirarRegistro(int bandeja, string nombre)
   }
 
   return registro;
+}
+
+int RetornarContador(string nombre){
+
+  //accede a la memoria compartida
+  // posición inicial
+  char *dir = abrirMemoria(nombre);
+  header *pHeader = (header *)dir;
+  int contador = pHeader->contador;
+  cout << "Se ha ingesado un total de : " << pHeader->contador << " registros" << endl;
+  return 0;
+
 }
 
