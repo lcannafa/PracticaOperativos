@@ -286,7 +286,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
         {
 
             //GENERACION del costo en reativo según tipo
-            int costo;
+            int costo = 0;
             char tipodelregistro = pRegistro->tipo;
             for (int f = 0; f < pRegistro->cantidad; ++f)
             {
