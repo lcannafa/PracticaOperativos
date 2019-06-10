@@ -12,7 +12,7 @@ Para la ejecucion se pueden usar los siguientes comandos:
 
 ./build/mainbasura reg -n [string] donde se pueden ingresar los elementos manualmente o 
 
-./build/mainbasura reg -n [string]{{filename1}...|}
+./build/mainbasura reg -n [string] {{filename1}...|}
 
 ./build/mainbasura ctrl -n [string] esto abrira una linea ejecutable en consola en la cual se podran ejecutar los siguientes sub comandos:
 
