@@ -55,6 +55,6 @@ int crearEspacio(string nombre, int i, int ie, int oe, int q, int b, int d, int 
   strcpy(pHeader->n, nombre.c_str());
 
   close(fd);
-  
+
   return EXIT_SUCCESS;
 }

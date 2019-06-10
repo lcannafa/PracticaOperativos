@@ -35,15 +35,13 @@ int ingresarRegistro(registroentrada registro, string nombre)
 
   header *pHeader = (header *)dir;
 
-  int i  = pHeader->i;
+  int i = pHeader->i;
   int ie = pHeader->ie;
   int oe = pHeader->oe;
   int contador = pHeader->contador;
 
-
   // variable para recorrer la bandeja
   int recorrido = 0;
-
 
   // posición inicial de la bandeja i
   char *pos = (registro.bandeja * ie * sizeof(registroentrada)) + dir + sizeof(header);
@@ -69,12 +67,12 @@ int ingresarRegistro(registroentrada registro, string nombre)
       pRegistro->tipo = registro.tipo;
       pRegistro->cantidad = registro.cantidad;
       pHeader->contador = pHeader->contador + 1;
-      pRegistro->time = rand() % ((10+1)-1);
+      pRegistro->time = rand() % ((10 + 1) - 1);
       //Soy productor
       sem_post(arrayMut);
       sem_post(arrayLleno);
       return EXIT_SUCCESS;
-          }
+    }
     // sino sigue avanzando
     else
     {
@@ -108,7 +106,8 @@ int recorrer(string nombre)
     {
       char *posn = (pos + (temp2 * sizeof(registroentrada)));
       registroentrada *pRegistro = (registroentrada *)posn;
-      if(pRegistro->cantidad > 0){
+      if (pRegistro->cantidad > 0)
+      {
         cout << "[" << pRegistro->id << " " << pRegistro->bandeja << " " << pRegistro->tipo << " " << pRegistro->cantidad << "]" << endl;
       }
       temp2++;
@@ -168,14 +167,14 @@ registrosalida retirarRegistro(int bandeja, string nombre)
     //si encuentro elemento a retirar
     if (pRegistro->cantidad > 0)
     {
-      
+
       //asigno los valores a devolver
       registro.cantidad = pRegistro->cantidad;
       registro.id = pRegistro->id;
       registro.tipo = pRegistro->tipo;
       registro.bandeja = pRegistro->bandeja;
       registro.time = pRegistro->time;
-      
+
       //Pongo basura donde estaba
       pRegistro->bandeja = bandeja;
       pRegistro->id = 0;
@@ -197,7 +196,8 @@ registrosalida retirarRegistro(int bandeja, string nombre)
   return registro;
 }
 
-int retornarContador(string nombre){
+int retornarContador(string nombre)
+{
 
   //accede a la memoria compartida
   // posición inicial
@@ -206,6 +206,4 @@ int retornarContador(string nombre){
   int contador = pHeader->contador;
   //cout << "Se ha ingesado un total de : " << pHeader->contador << " registros" << endl;
   return 0;
-
 }
-
