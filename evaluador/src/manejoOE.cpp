@@ -74,7 +74,6 @@ int ingresarSalida(registrosalida registro, string nombre)
   return 1;
 }
 
-
 int recorrerOE(string nombre)
 {
   int temp1 = 0;
@@ -92,7 +91,8 @@ int recorrerOE(string nombre)
   {
     char *posn = (pos + (temp1 * sizeof(registrosalida)));
     registrosalida *pRegistro = (registrosalida *)posn;
-    if(pRegistro->cantidad > 0){
+    if (pRegistro->cantidad > 0)
+    {
       cout << "[" << pRegistro->id << " " << pRegistro->tipo << " " << pRegistro->cantidad << " " << pRegistro->resultado << "]" << endl;
     }
     temp1++;

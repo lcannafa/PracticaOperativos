@@ -126,8 +126,8 @@ int recorrerQ(string nombre)
         {
             char *posn = pos + (temp2 * sizeof(registrosalida));
             registrosalida *pRegistroSalida = (registrosalida *)posn;
-            if(pRegistroSalida->cantidad > 0)
-            cout << "[" << pRegistroSalida->id << " "<<pRegistroSalida->bandeja<< " "<< pRegistroSalida->tipo << " "<< pRegistroSalida->cantidad<< " "<< pRegistroSalida->time <<"]" << endl;
+            if (pRegistroSalida->cantidad > 0)
+                cout << "[" << pRegistroSalida->id << " " << pRegistroSalida->bandeja << " " << pRegistroSalida->tipo << " " << pRegistroSalida->cantidad << " " << pRegistroSalida->time << "]" << endl;
             temp2++;
         }
 
@@ -298,14 +298,12 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
                     costo += 8 + rand() % ((25 + 1) - 8);
             }
 
-
-
             // Si es tipo B, Si no tengo suficiente reactivo libero el mutex y lo espero de nuevo
             if (tipodelregistro == 'B')
             {
                 while (pHeaderQ->b < costo)
                 {
-                sem_wait(arrayReact);
+                    sem_wait(arrayReact);
                 }
                 pHeaderQ->b -= costo;
             }
@@ -314,7 +312,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
             {
                 while (pHeaderQ->d < costo)
                 {
-                sem_wait(arrayReact);
+                    sem_wait(arrayReact);
                 }
                 pHeaderQ->d -= costo;
             }
@@ -323,7 +321,7 @@ registrosalida retirarRegistroDeQ(char tipo, string nombre)
             {
                 while (pHeaderQ->s < costo)
                 {
-                sem_wait(arrayReact);
+                    sem_wait(arrayReact);
                 }
                 pHeaderQ->s -= costo;
             }
@@ -365,7 +363,6 @@ int IngresarReactivo(string nombre, int cantidad, char tipo)
     int s = pHeaderQ->s;
     int i = pHeaderQ->i;
 
-
     sem_t *arrayReact;
     int pos_tipo;
 
@@ -400,8 +397,8 @@ int ImprimirReactivo(string nombre)
     char *dirQ = abrirQ(nombre);
     headerQ *pHeaderQ = (headerQ *)dirQ;
 
-    cout << "Tenemos " << pHeaderQ->b << " de reactivo B" << endl;
-    cout << "Tenemos " << pHeaderQ->d << " de reactivo D" << endl;
-    cout << "Tenemos " << pHeaderQ->s << " de reactivo S" << endl;
+    cout << "Reactivo B: " << pHeaderQ->b << endl;
+    cout << "Reactivo D: " << pHeaderQ->d << endl;
+    cout << "Reactivo S: " << pHeaderQ->s << endl;
     return 0;
 }

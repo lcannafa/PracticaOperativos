@@ -8,12 +8,14 @@
 
 using namespace std;
 
-string * parser(string line){
+string *parser(string line)
+{
     int i = 0;
     static string arr[3];
     stringstream ssin(line);
 
-    while (ssin.good() && i < 3){
+    while (ssin.good() && i < 3)
+    {
         ssin >> arr[i];
         ++i;
     }

@@ -206,7 +206,7 @@ int main(int argc, char *argv[])
                     listen = false;
                 }
 
-                // Se parsea el input del usuario.
+                // parsea el input usuario.
                 string *parsed_user_input = parser(user_input);
 
                 registro.bandeja = stoi(parsed_user_input[0]);
